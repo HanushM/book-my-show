@@ -10,10 +10,7 @@ public class Theater {
 	@Id
 	private int theaterId;
 	private String theaterName;
-	@ManyToOne(optional = false)
-	@JoinColumn(name="pincode",nullable = false)
-	private Place place;
-	
+	private int pinCode;
 	public int getTheaterId() {
 		return theaterId;
 	}
@@ -26,6 +23,11 @@ public class Theater {
 	public void setTheaterName(String theaterName) {
 		this.theaterName = theaterName;
 	}
-	
-	
+	public int getPinCode() {
+		return pinCode;
+	}
+	public void setPinCode(int pinCode) {
+		this.pinCode = pinCode;
+	}
+		
 }

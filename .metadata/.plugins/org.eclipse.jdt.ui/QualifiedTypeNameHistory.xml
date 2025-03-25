@@ -1,24 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="jakarta.persistence.ManyToOne"/>
-    <fullyQualifiedTypeName name="jakarta.persistence.JoinColumn"/>
-    <fullyQualifiedTypeName name="com.example.demo.services.PlaceService"/>
-    <fullyQualifiedTypeName name="com.example.demo.services.ScreenService"/>
-    <fullyQualifiedTypeName name="com.example.demo.services.TierService"/>
-    <fullyQualifiedTypeName name="com.example.demo.controllers.TierController"/>
-    <fullyQualifiedTypeName name="com.example.demo.controllers.SeatService"/>
-    <fullyQualifiedTypeName name="com.example.demo.services.SeatService"/>
-    <fullyQualifiedTypeName name="com.example.demo.screenrepository.ScreenRepositoryImpl"/>
-    <fullyQualifiedTypeName name="com.example.demo.seatrepository.SeatRepositoryImpl"/>
-    <fullyQualifiedTypeName name="com.example.demo.services.TheaterService"/>
-    <fullyQualifiedTypeName name="com.example.demo.theaterrepository.TheaterRepositoryImpl"/>
-    <fullyQualifiedTypeName name="com.example.demo.tierrepository.TierRepositoryImpl"/>
-    <fullyQualifiedTypeName name="java.lang.System"/>
-    <fullyQualifiedTypeName name="java.sql.Connection"/>
-    <fullyQualifiedTypeName name="java.sql.DriverManager"/>
-    <fullyQualifiedTypeName name="com.example.demo.placerepository.PlaceRepositoryImpl"/>
-    <fullyQualifiedTypeName name="com.example.demo.placerepository.PlaceRepository"/>
-    <fullyQualifiedTypeName name="com.example.demo.repositories.PlaceRepository"/>
     <fullyQualifiedTypeName name="com.example.demo.repositories.ScreenRepository"/>
     <fullyQualifiedTypeName name="com.example.demo.repositories.SeatRepository"/>
     <fullyQualifiedTypeName name="com.example.demo.repositories.TheaterRepository"/>
@@ -27,12 +8,10 @@
     <fullyQualifiedTypeName name="com.example.demo.models.Seat"/>
     <fullyQualifiedTypeName name="com.example.demo.models.Theater"/>
     <fullyQualifiedTypeName name="com.example.demo.models.Tier"/>
-    <fullyQualifiedTypeName name="java.lang.Integer"/>
     <fullyQualifiedTypeName name="com.example.demo.repositories.TierRepository"/>
     <fullyQualifiedTypeName name="java.lang.LinkageError"/>
     <fullyQualifiedTypeName name="com.example.demo.models.Place"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestParam"/>
-    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.JpaRepository"/>
     <fullyQualifiedTypeName name="jakarta.persistence.Entity"/>
     <fullyQualifiedTypeName name="java.lang.Long"/>
     <fullyQualifiedTypeName name="com.example.demo.service.UserService"/>
@@ -59,4 +38,26 @@
     <fullyQualifiedTypeName name="java.lang.Boolean"/>
     <fullyQualifiedTypeName name="java.util.Optional"/>
     <fullyQualifiedTypeName name="jakarta.persistence.Column"/>
+    <fullyQualifiedTypeName name="org.springframework.cloud.netflix.eureka.server.EnableEurekaServer"/>
+    <fullyQualifiedTypeName name="org.springframework.context.annotation.Bean"/>
+    <fullyQualifiedTypeName name="org.springframework.cloud.gateway.route.RouteLocator"/>
+    <fullyQualifiedTypeName name="org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder"/>
+    <fullyQualifiedTypeName name="com.example.demo.repository.PlaceRepository"/>
+    <fullyQualifiedTypeName name="com.example.demo.service.PlaceService"/>
+    <fullyQualifiedTypeName name="com.example.demo.entity.Place"/>
+    <fullyQualifiedTypeName name="org.springframework.cloud.client.discovery.EnableDiscoveryClient"/>
+    <fullyQualifiedTypeName name="com.example.demo.service.TheaterService"/>
+    <fullyQualifiedTypeName name="com.example.demo.repository.TheaterRepository"/>
+    <fullyQualifiedTypeName name="com.example.demo.entity.Theater"/>
+    <fullyQualifiedTypeName name="com.example.demo.repository.ScreenRepository"/>
+    <fullyQualifiedTypeName name="com.example.demo.service.ScreenService"/>
+    <fullyQualifiedTypeName name="com.example.demo.entity.Screen"/>
+    <fullyQualifiedTypeName name="com.example.demo.repository.TierRepository"/>
+    <fullyQualifiedTypeName name="com.example.demo.service.TierService"/>
+    <fullyQualifiedTypeName name="com.example.demo.entity.Tier"/>
+    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.JpaRepository"/>
+    <fullyQualifiedTypeName name="java.lang.Integer"/>
+    <fullyQualifiedTypeName name="com.example.demo.service.SeatService"/>
+    <fullyQualifiedTypeName name="com.example.demo.repository.SeatRepository"/>
+    <fullyQualifiedTypeName name="com.example.demo.entity.Seat"/>
 </qualifiedTypeNameHistroy>
