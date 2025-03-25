@@ -1,0 +1,37 @@
+package com.example.demo.model;
+
+import jakarta.persistence.Entity;
+
+@Entity
+public class User {
+	private String emailId;
+	private Long mobileNo;
+	private String name;
+	private String paswword;
+	public String getEmailId() {
+		return emailId;
+	}
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+	public Long getMobileNo() {
+		return mobileNo;
+	}
+	public void setMobileNo(Long mobileNo) {
+		this.mobileNo = mobileNo;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getPaswword() {
+		return paswword;
+	}
+	public void setPaswword(String paswword) {
+		this.paswword = paswword;
+	}
+	
+	
+}

@@ -1,0 +1,51 @@
+package com.example.demo.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
+
+@Service
+public class UserService {
+	@Autowired
+	UserRepository userRepository;
+	
+	public User addUser(User user) {
+		return userRepository.save(user);
+	}
+	
+	public User getUser(String emailId) {
+		return userRepository.findById(emailId).orElse(null);
+	}
+	
+	public User updateUser(String emailId, User updatedUser) {
+	    Optional<User> existingUser = userRepository.findById(emailId);
+	    if (existingUser.isPresent()) {
+	        User user = existingUser.get();
+
+	        if (updatedUser.getMobileNo() != null) {
+	            user.setMobileNo(updatedUser.getMobileNo());
+	        }
+	        if (updatedUser.getName() != null) {
+	            user.setName(updatedUser.getName());
+	        }
+	        if (updatedUser.getPassword() != null) {
+	            user.setPassword(updatedUser.getPassword());
+	        }
+	        
+	        return userRepository.save(user);
+	    }
+	    return null;
+	}
+
+	public Boolean deleteUser(String emailId) {
+		if(userRepository.existsById(emailId)) {
+			userRepository.deleteById(emailId);
+			return true;
+		}
+		return false;
+	}
+}
