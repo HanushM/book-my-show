@@ -14,9 +14,5 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
     List<Seat> findByTierId(Long tierId);
     
     Optional<Seat> findBySeatNoAndTierId(String seatNo, Long tierId);
-
-    List<Seat> findBySeatIdIn(List<Long> seatIds);
-
-    List<Seat> findByStatus(SeatStatus status);
 }
 

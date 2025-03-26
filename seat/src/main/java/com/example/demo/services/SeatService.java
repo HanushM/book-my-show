@@ -21,78 +21,48 @@ public class SeatService {
     @Autowired
     private RestTemplate restTemplate; // To call Booking Service
 
-    public List<Seat> lockSeats(List<Long> seatIds, String userEmail) {
-        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
+    private final String BOOKING_SERVICE_URL = "http://localhost:8082/bookings/create"; // Booking Service URL
 
-        for (Seat seat : seats) {
-            if (seat.getStatus() != SeatStatus.AVAILABLE) {
-                throw new RuntimeException("Seat " + seat.getSeatNo() + " is not available");
-            }
-            seat.setStatus(SeatStatus.LOCKED);
-            seat.setLockedBy(userEmail);
-            seat.setLockedUntil(LocalDateTime.now().plusMinutes(5)); // Lock for 5 minutes
+    // Lock seat for a user
+    public Seat lockSeat(Long tierId, String seatNo, String userEmail) {
+        Optional<Seat> seatOpt = seatRepository.findBySeatNoAndTierId(seatNo, tierId);
+
+        if (seatOpt.isEmpty() || seatOpt.get().getStatus() != SeatStatus.AVAILABLE) {
+            throw new RuntimeException("Seat not available");
         }
 
-        return seatRepository.saveAll(seats);
+        Seat seat = seatOpt.get();
+        seat.setStatus(SeatStatus.LOCKED);
+        seat.setLockedBy(userEmail);
+        seat.setLockedUntil(LocalDateTime.now().plusMinutes(5));
+
+        return seatRepository.save(seat);
     }
 
-    public void confirmSeats(List<Long> seatIds) {
-        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
+    // Unlock seat when payment fails or timer expires
+    public void unlockSeat(Long seatId) {
+        Optional<Seat> seatOpt = seatRepository.findById(seatId);
 
-        for (Seat seat : seats) {
-            if (seat.getStatus() == SeatStatus.LOCKED) {
-                seat.setStatus(SeatStatus.BOOKED);
-                seat.setLockedBy(null);
-                seat.setLockedUntil(null);
-            }
+        if (seatOpt.isPresent() && seatOpt.get().getStatus() == SeatStatus.LOCKED) {
+            Seat seat = seatOpt.get();
+            seat.setStatus(SeatStatus.AVAILABLE);
+            seat.setLockedBy(null);
+            seat.setLockedUntil(null);
+            seatRepository.save(seat);
         }
-
-        seatRepository.saveAll(seats);
     }
 
-    public void releaseSeats(List<Long> seatIds) {
-        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
+    // Book seat when payment is successful
+    public void bookSeat(Long seatId) {
+        Optional<Seat> seatOpt = seatRepository.findById(seatId);
 
-        for (Seat seat : seats) {
-            if (seat.getStatus() == SeatStatus.LOCKED) {
-                seat.setStatus(SeatStatus.AVAILABLE);
-                seat.setLockedBy(null);
-                seat.setLockedUntil(null);
-            }
+        if (seatOpt.isPresent() && seatOpt.get().getStatus() == SeatStatus.LOCKED) {
+            Seat seat = seatOpt.get();
+            seat.setStatus(SeatStatus.BOOKED);
+            seat.setLockedBy(null);
+            seat.setLockedUntil(null);
+            seatRepository.save(seat);
         }
-
-        seatRepository.saveAll(seats);
-    }
-
-    public void unlockExpiredSeats() {
-        List<Seat> lockedSeats = seatRepository.findByStatus(SeatStatus.LOCKED);
-
-        for (Seat seat : lockedSeats) {
-            if (seat.getLockedUntil() != null && seat.getLockedUntil().isBefore(LocalDateTime.now())) {
-                seat.setStatus(SeatStatus.AVAILABLE);
-                seat.setLockedBy(null);
-                seat.setLockedUntil(null);
-            }
-        }
-
-        seatRepository.saveAll(lockedSeats);
-    }
-
-    public boolean extendSeatLockIfPaymentInProgress(List<Long> seatIds, String userEmail) {
-        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
-        boolean extended = false;
-
-        for (Seat seat : seats) {
-            if (seat.getStatus() == SeatStatus.LOCKED && 
-                seat.getLockedBy().equals(userEmail) && 
-                seat.getLockedUntil().isBefore(LocalDateTime.now().plusMinutes(1))) {
-                seat.setLockedUntil(LocalDateTime.now().plusMinutes(3)); 
-                extended = true;
-            }
-        }
-
-        seatRepository.saveAll(seats);
-        return extended;
     }
 }
 

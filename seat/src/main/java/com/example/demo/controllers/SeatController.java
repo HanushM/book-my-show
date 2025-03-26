@@ -14,30 +14,27 @@ public class SeatController {
     @Autowired
     private SeatService seatService;
 
-
+    // Lock a seat
     @PostMapping("/lock")
-    public List<Seat> lockSeats(@RequestParam List<Long> seatIds, @RequestParam String userEmail) {
-        return seatService.lockSeats(seatIds, userEmail);
+    public ResponseEntity<Seat> lockSeat(@RequestParam Long tierId, 
+                                         @RequestParam String seatNo, 
+                                         @RequestParam String userEmail) {
+        Seat lockedSeat = seatService.lockSeat(tierId, seatNo, userEmail);
+        return ResponseEntity.ok(lockedSeat);
     }
 
-    @PutMapping("/confirm")
-    public void confirmSeats(@RequestBody List<Long> seatIds) {
-        seatService.confirmSeats(seatIds);
+    // Unlock a seat (for payment failure or timeout)
+    @PutMapping("/unlock/{seatId}")
+    public ResponseEntity<String> unlockSeat(@PathVariable Long seatId) {
+        seatService.unlockSeat(seatId);
+        return ResponseEntity.ok("Seat unlocked successfully.");
     }
 
-    @PutMapping("/release")
-    public void releaseSeats(@RequestBody List<Long> seatIds) {
-        seatService.releaseSeats(seatIds);
+    // Book a seat when payment succeeds
+    @PutMapping("/book/{seatId}")
+    public ResponseEntity<String> bookSeat(@PathVariable Long seatId) {
+        seatService.bookSeat(seatId);
+        return ResponseEntity.ok("Seat booked successfully.");
     }
-
-    @PutMapping("/unlockExpired")
-    public void unlockExpiredSeats() {
-        seatService.unlockExpiredSeats();
-    }
-
-    @PutMapping("/extend-lock")
-    public boolean extendSeatLockIfPaymentInProgress(@RequestParam List<Long> seatIds, @RequestParam String userEmail) {
-        return seatService.extendSeatLockIfPaymentInProgress(seatIds, userEmail);}
-    
 }
 
