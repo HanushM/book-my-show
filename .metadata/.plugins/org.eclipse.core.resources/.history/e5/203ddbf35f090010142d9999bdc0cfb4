@@ -1,0 +1,67 @@
+package com.example.demo.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.models.Screen;
+import com.example.demo.services.ScreenService;
+
+@RestController
+@RequestMapping("/screen")
+public class ScreenController {
+	@Autowired
+	ScreenService screenService;
+	
+    @PostMapping("/addScreen")
+    public ResponseEntity<Screen> addScreen(@RequestBody Screen screen) {
+        Screen newScreen = screenService.addScreen(screen);
+        return new ResponseEntity<>(newScreen, HttpStatus.CREATED);
+    }
+    
+    @GetMapping("/all")
+    public ResponseEntity<List<Screen>> getAllScreens() {
+        List<Screen> screens = screenService.getAllScreens();
+        return new ResponseEntity<>(screens, HttpStatus.OK);
+    }
+    
+    @GetMapping("/{screenId}")
+    public ResponseEntity<Screen> getScreenById(@PathVariable int screenId) {
+        Optional<Screen> screen = screenService.getScreenById(screenId);
+        return screen.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }	
+    
+    @GetMapping("/theater/{theaterId}")
+    public ResponseEntity<List<Screen>> getScreensByTheater(@PathVariable int theaterId) {
+        List<Screen> screens = screenService.getScreensByTheater(theaterId);
+        return new ResponseEntity<>(screens, HttpStatus.OK);
+    }
+    
+    @PutMapping("/update/{screenId}")
+    public ResponseEntity<Screen> updateScreen(@PathVariable int screenId, @RequestBody Screen updatedScreen) {
+        try {
+            Screen screen = screenService.updateScreen(screenId, updatedScreen);
+            return new ResponseEntity<>(screen, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @DeleteMapping("/delete/{screenId}")
+    public ResponseEntity<Void> deleteScreen(@PathVariable int screenId) {
+        screenService.deleteScreen(screenId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+}
+

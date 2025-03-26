@@ -1,0 +1,42 @@
+package com.example.demo.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.models.Theater;
+import com.example.demo.repositories.TheaterRepository;
+
+@Service
+public class TheaterService {
+	@Autowired
+	TheaterRepository theaterRepository;
+    public Theater addTheater(Theater theater) {
+        return theaterRepository.save(theater);
+    }
+    public List<Theater> getAllTheaters() {
+        return theaterRepository.findAll();
+    }
+    public Theater getTheaterById(int theaterId) {
+        return theaterRepository.findById(theaterId).orElse(null);
+    }
+    public List<Theater> getTheatersByPlace(int pinCode) {
+        return theaterRepository.findByPlace_PinCode(pinCode);
+    }
+    public Theater updateTheater(int theaterId, Theater updatedTheater) {
+        if (theaterRepository.existsById(theaterId)) {
+            updatedTheater.setTheaterId(theaterId);
+            return theaterRepository.save(updatedTheater);
+        }
+        return null;
+    }
+    public boolean deleteTheater(int theaterId) {
+        if (theaterRepository.existsById(theaterId)) {
+            theaterRepository.deleteById(theaterId);
+            return true;
+        }
+        return false;
+    }
+}
+

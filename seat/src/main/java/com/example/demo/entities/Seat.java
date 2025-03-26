@@ -11,13 +11,10 @@ public class Seat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seatId;
-
     private Long tierId;
     private String seatNo;
-
     @Enumerated(EnumType.STRING)
     private SeatStatus status;
-
     private String lockedBy; // Email of the user who locked the seat
     private LocalDateTime lockedUntil; // Time until the seat remains locked
 

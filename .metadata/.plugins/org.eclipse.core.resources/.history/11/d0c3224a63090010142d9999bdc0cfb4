@@ -1,0 +1,49 @@
+package com.example.demo.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.repository.SeatRepository;
+
+
+@Service
+public class SeatService {
+    @Autowired
+    private SeatRepository seatRepository;
+
+    public Seat addSeat(Seat seat) {
+        return seatRepository.save(seat);
+    }
+
+    public List<Seat> getAllSeats() {
+        return seatRepository.findAll();
+    }
+
+    public Optional<Seat> getSeatById(int seatId) {
+        return seatRepository.findById(seatId);
+    }
+
+    public List<Seat> getSeatsByTier(int tierId) {
+        return seatRepository.findByTier_TierId(tierId);
+    }
+
+    public Seat updateSeat(int seatId, Seat updatedSeat) {
+        Optional<Seat> existingSeat = seatRepository.findById(seatId);
+        if (existingSeat.isPresent()) {
+            Seat seat = existingSeat.get();
+            seat.setSeatNo(updatedSeat.getSeatNo());
+            seat.setStatus(updatedSeat.getStatus());
+            return seatRepository.save(seat);
+        } else {
+            throw new RuntimeException("Seat not found with ID: " + seatId);
+        }
+    }
+
+    public void deleteSeat(int seatId) {
+        seatRepository.deleteById(seatId);
+    }
+
+}
