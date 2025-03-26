@@ -126,14 +126,14 @@ public class SeatService {
         return seatRepository.findByStatusAndLockedBy(SeatStatus.LOCKED, userEmail);
     }
 
-    public Map<Integer, Integer> getSeatPrices(List<Integer> seatIds) {
+    public Map<Integer, Integer> getSeatAmount(List<Integer> seatIds) {
         List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
-        Map<Integer, Integer> seatPrices = new HashMap<>();
+        Map<Integer, Integer> seatAmounts = new HashMap<>();
 
         for (Seat seat : seats) {
-            seatPrices.put(seat.getSeatId(), seat.getTier().getPrice());
+            seatPrices.put(seat.getSeatId(), seat.getTier().getAmount());
         }
 
-        return seatPrices;
+        return seatAmounts;
     }
 }

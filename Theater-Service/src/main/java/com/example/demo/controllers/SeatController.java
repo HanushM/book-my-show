@@ -97,8 +97,8 @@ public class SeatController {
     }
 
     @GetMapping("/prices")
-    public ResponseEntity<Map<Integer, Integer>> getSeatPrices(@RequestParam List<Integer> seatIds) {
-        Map<Integer, Integer> seatPrices = seatService.getSeatPrices(seatIds);
+    public ResponseEntity<Map<Integer, Integer>> getSeatAmount(@RequestParam List<Integer> seatIds) {
+        Map<Integer, Integer> seatPrices = seatService.getSeatAmount(seatIds);
         return ResponseEntity.ok(seatPrices);
     }
 }
