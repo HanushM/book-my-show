@@ -65,5 +65,40 @@ public class SeatController {
         seatService.deleteSeat(seatId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-	
+
+    @PostMapping("/lock")
+    public List<Seat> lockSeats(@RequestParam List<Long> seatIds, @RequestParam String userEmail) {
+        return seatService.lockSeats(seatIds, userEmail);
+    }
+
+    @PutMapping("/extend-lock")
+    public boolean extendSeatLockIfPaymentInProgress(@RequestParam List<Long> seatIds, @RequestParam String userEmail) {
+        return seatService.extendSeatLockIfPaymentInProgress(seatIds, userEmail);
+    }
+
+    @PutMapping("/confirm")
+    public void confirmSeats(@RequestBody List<Long> seatIds) {
+        seatService.confirmSeats(seatIds);
+    }
+
+    @PutMapping("/release")
+    public void releaseSeats(@RequestBody List<Long> seatIds) {
+        seatService.releaseSeats(seatIds);
+    }
+
+    @PutMapping("/unlockExpired")
+    public void unlockExpiredSeats() {
+        seatService.unlockExpiredSeats();
+    }
+    
+    @GetMapping("/locked")
+    public List<Seat> getLockedSeats(@RequestParam String userEmail) {
+        return seatService.getLockedSeats(userEmail);
+    }
+
+    @GetMapping("/prices")
+    public ResponseEntity<Map<Integer, Integer>> getSeatPrices(@RequestParam List<Integer> seatIds) {
+        Map<Integer, Integer> seatPrices = seatService.getSeatPrices(seatIds);
+        return ResponseEntity.ok(seatPrices);
+    }
 }

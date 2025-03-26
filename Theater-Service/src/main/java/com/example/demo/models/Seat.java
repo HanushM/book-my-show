@@ -8,12 +8,18 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Seat {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int seatId;
 	private int seatNo;
-	private String status;
+
+    @Enumerated(EnumType.STRING)
+    private SeatStatus status;
+
 	@ManyToOne(optional = false)
 	@JoinColumn(name="tierId",nullable = false)
 	private Tier tier;
+	private String lockedBy;
+	private LocalDateTime lockedUntil;
 	
 	public int getSeatId() {
 		return seatId;
@@ -27,11 +33,36 @@ public class Seat {
 	public void setSeatNo(int seatNo) {
 		this.seatNo = seatNo;
 	}
-	public String getStatus() {
-		return status;
+
+    public SeatStatus getStatus() {
+        return status;
+    }
+    public void setStatus(SeatStatus status) {
+        this.status = status;
+    }
+
+    public String getLockedBy() {
+        return lockedBy;
+    }
+
+    public void setLockedBy(String lockedBy) {
+        this.lockedBy = lockedBy;
+    }
+
+    public LocalDateTime getLockedUntil() {
+        return lockedUntil;
+    }
+
+    public void setLockedUntil(LocalDateTime lockedUntil) {
+        this.lockedUntil = lockedUntil;
+    }	
+
+	public Tier getTier() {
+    	return tier;
 	}
-	public void setStatus(String status) {
-		this.status = status;
+
+	public void setTier(Tier tier) {
+		this.tier = tier;
 	}
-	
+
 }

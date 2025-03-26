@@ -46,4 +46,94 @@ public class SeatService {
         seatRepository.deleteById(seatId);
     }
 
+    public List<Seat> lockSeats(List<Long> seatIds, String userEmail) {
+        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
+
+        for (Seat seat : seats) {
+            if (seat.getStatus() != SeatStatus.AVAILABLE) {
+                throw new RuntimeException("Seat " + seat.getSeatNo() + " is not available");
+            }
+            seat.setStatus(SeatStatus.LOCKED);
+            seat.setLockedBy(userEmail);
+            seat.setLockedUntil(LocalDateTime.now().plusMinutes(5)); // Initial Lock - 5 minutes
+        }
+
+        return seatRepository.saveAll(seats);
+    }
+
+    public boolean extendSeatLockIfPaymentInProgress(List<Long> seatIds, String userEmail) {
+        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
+        boolean extended = false;
+
+        for (Seat seat : seats) {
+            if (seat.getStatus() == SeatStatus.LOCKED && 
+                seat.getLockedBy().equals(userEmail) && 
+                seat.getLockedUntil().isBefore(LocalDateTime.now().plusMinutes(1))) {
+
+                // Extend lock time **ONLY ONCE**
+                seat.setLockedUntil(LocalDateTime.now().plusMinutes(3)); // Extend for 3 more minutes
+                extended = true;
+            }
+        }
+
+        seatRepository.saveAll(seats);
+        return extended;
+    }
+
+    public void confirmSeats(List<Long> seatIds) {
+        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
+
+        for (Seat seat : seats) {
+            if (seat.getStatus() == SeatStatus.LOCKED) {
+                seat.setStatus(SeatStatus.BOOKED);
+                seat.setLockedBy(null);
+                seat.setLockedUntil(null);
+            }
+        }
+
+        seatRepository.saveAll(seats);
+    }
+
+    public void releaseSeats(List<Long> seatIds) {
+        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
+
+        for (Seat seat : seats) {
+            if (seat.getStatus() == SeatStatus.LOCKED) {
+                seat.setStatus(SeatStatus.AVAILABLE);
+                seat.setLockedBy(null);
+                seat.setLockedUntil(null);
+            }
+        }
+
+        seatRepository.saveAll(seats);
+    }
+
+    public void unlockExpiredSeats() {
+        List<Seat> lockedSeats = seatRepository.findByStatus(SeatStatus.LOCKED);
+
+        for (Seat seat : lockedSeats) {
+            if (seat.getLockedUntil() != null && seat.getLockedUntil().isBefore(LocalDateTime.now())) {
+                seat.setStatus(SeatStatus.AVAILABLE);
+                seat.setLockedBy(null);
+                seat.setLockedUntil(null);
+            }
+        }
+
+        seatRepository.saveAll(lockedSeats);
+    }
+
+    public List<Seat> getLockedSeats(String userEmail) {
+        return seatRepository.findByStatusAndLockedBy(SeatStatus.LOCKED, userEmail);
+    }
+
+    public Map<Integer, Integer> getSeatPrices(List<Integer> seatIds) {
+        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
+        Map<Integer, Integer> seatPrices = new HashMap<>();
+
+        for (Seat seat : seats) {
+            seatPrices.put(seat.getSeatId(), seat.getTier().getPrice());
+        }
+
+        return seatPrices;
+    }
 }
