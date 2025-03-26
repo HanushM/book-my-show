@@ -14,6 +14,7 @@ public class Tier {
 	@ManyToOne(optional = false)
 	@JoinColumn(name="screenId")
 	private Screen screen;
+	private int amount;
 	
 	public int getTierId() {
 		return tierId;
@@ -33,6 +34,11 @@ public class Tier {
 	public void setSeatCount(int seatCount) {
 		this.seatCount = seatCount;
 	}
-	
+	public int getAmount(){
+		return this.amount;
+	}
+	public void setAmount(int amount){
+		this.amount = amount;
+	}
 	
 }
