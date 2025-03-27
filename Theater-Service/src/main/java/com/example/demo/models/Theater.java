@@ -1,16 +1,23 @@
 package com.example.demo.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Theater {
-	@Id
-	private int theaterId;
-	private String theaterName;
-	private int pinCode;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int theaterId;
+    private String theaterName;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "pin_code",referencedColumnName = "pinCode", nullable = false)
+    private Place place;
+	
 	public int getTheaterId() {
 		return theaterId;
 	}
@@ -23,11 +30,12 @@ public class Theater {
 	public void setTheaterName(String theaterName) {
 		this.theaterName = theaterName;
 	}
-	public int getPinCode() {
-		return pinCode;
+	public Place getPlace() {
+		return place;
 	}
-	public void setPinCode(int pinCode) {
-		this.pinCode = pinCode;
+	public void setPlace(Place place) {
+		this.place = place;
 	}
+	
 		
 }

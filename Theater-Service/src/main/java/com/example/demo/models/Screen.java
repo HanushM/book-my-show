@@ -1,6 +1,8 @@
 package com.example.demo.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -8,12 +10,13 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Screen {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int screenId;
 	private int screenNo;
 	private String ScreenName;
-	private int Capacity;
+	private int capacity;
 	@ManyToOne(optional = false)
-	@JoinColumn(name="theaterId",nullable = false)
+	@JoinColumn(name="theater_id", referencedColumnName = "theaterId",nullable = false)
 	private Theater theater;
 	
 	public int getScreenId() {
@@ -35,10 +38,16 @@ public class Screen {
 		ScreenName = screenName;
 	}
 	public int getCapacity() {
-		return Capacity;
+		return capacity;
 	}
 	public void setCapacity(int capacity) {
-		Capacity = capacity;
+		this.capacity = capacity;
+	}
+	public Theater getTheater() {
+		return theater;
+	}
+	public void setTheater(Theater theater) {
+		this.theater = theater;
 	}
 	
 	

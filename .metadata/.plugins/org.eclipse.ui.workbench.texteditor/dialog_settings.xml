@@ -4,9 +4,13 @@
 	<section name="java.lang.Class">
 		<item key="replaceBarOpen" value="true"/>
 		<list key="replacehistory">
+			<item value="Integer"/>
 			<item value="Tier"/>
 		</list>
 		<list key="findhistory">
+			<item value="findBySeatNoAndTier_TierId"/>
+			<item value="SeatRepository.findBySeatNoAndTier_TierId"/>
+			<item value="Long"/>
 			<item value="Impl"/>
 			<item value="save"/>
 			<item value="Theater"/>

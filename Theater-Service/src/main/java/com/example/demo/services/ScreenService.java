@@ -13,6 +13,7 @@ import com.example.demo.repositories.ScreenRepository;
 public class ScreenService {
 	@Autowired
 	ScreenRepository screenRepository;
+	
     public Screen addScreen(Screen screen) {
         return screenRepository.save(screen);
     }

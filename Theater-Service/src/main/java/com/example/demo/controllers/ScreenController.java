@@ -27,7 +27,10 @@ public class ScreenController {
 	ScreenService screenService;
 	
     @PostMapping("/addScreen")
-    public ResponseEntity<Screen> addScreen(@RequestBody Screen screen) {
+    public ResponseEntity<?> addScreen(@RequestBody Screen screen) {
+        if (screen.getTheater() == null || screen.getTheater().getTheaterId() == 0) {
+            return new ResponseEntity<>("Theater is required", HttpStatus.BAD_REQUEST);
+        }
         Screen newScreen = screenService.addScreen(screen);
         return new ResponseEntity<>(newScreen, HttpStatus.CREATED);
     }

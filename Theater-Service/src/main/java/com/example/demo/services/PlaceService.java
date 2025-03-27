@@ -19,17 +19,17 @@ public class PlaceService {
     public List<Place> getAllPlaces() {
         return placeRepository.findAll();
     }
-    public Place getPlaceById(int pinCode) {
+    public Place getPlaceById(long pinCode) {
         return placeRepository.findById(pinCode).orElse(null);
     }
-    public Place updatePlace(int pinCode, Place updatedPlace) {
+    public Place updatePlace(long pinCode, Place updatedPlace) {
         if (placeRepository.existsById(pinCode)) {
             updatedPlace.setPinCode(pinCode);
             return placeRepository.save(updatedPlace);
         }
         return null;
     }
-    public boolean deletePlace(int pinCode) {
+    public boolean deletePlace(long pinCode) {
         if (placeRepository.existsById(pinCode)) {
             placeRepository.deleteById(pinCode);
             return true;

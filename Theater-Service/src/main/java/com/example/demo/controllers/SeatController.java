@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -27,7 +29,10 @@ public class SeatController {
     private SeatService seatService;
 
     @PostMapping("/addSeat")
-    public ResponseEntity<Seat> addSeat(@RequestBody Seat seat) {
+    public ResponseEntity<?> addSeat(@RequestBody Seat seat) {
+    	if(seat.getTier()==null || seat.getTier().getTierId()==0) {
+    		return new ResponseEntity<>("Tier is Required",HttpStatus.BAD_REQUEST);
+    	}
         Seat newSeat = seatService.addSeat(seat);
         return new ResponseEntity<>(newSeat, HttpStatus.CREATED);
     }
@@ -67,22 +72,22 @@ public class SeatController {
     }
 
     @PostMapping("/lock")
-    public List<Seat> lockSeats(@RequestParam List<Long> seatIds, @RequestParam String userEmail) {
+    public List<Seat> lockSeats(@RequestParam List<Integer> seatIds, @RequestParam String userEmail) {
         return seatService.lockSeats(seatIds, userEmail);
     }
 
     @PutMapping("/extend-lock")
-    public boolean extendSeatLockIfPaymentInProgress(@RequestParam List<Long> seatIds, @RequestParam String userEmail) {
+    public boolean extendSeatLockIfPaymentInProgress(@RequestParam List<Integer> seatIds, @RequestParam String userEmail) {
         return seatService.extendSeatLockIfPaymentInProgress(seatIds, userEmail);
     }
 
     @PutMapping("/confirm")
-    public void confirmSeats(@RequestBody List<Long> seatIds) {
+    public void confirmSeats(@RequestBody List<Integer> seatIds) {
         seatService.confirmSeats(seatIds);
     }
 
     @PutMapping("/release")
-    public void releaseSeats(@RequestBody List<Long> seatIds) {
+    public void releaseSeats(@RequestParam List<Integer> seatIds) {
         seatService.releaseSeats(seatIds);
     }
 

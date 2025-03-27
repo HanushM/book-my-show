@@ -1,12 +1,16 @@
 package com.example.demo.services;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.models.Seat;
+import com.example.demo.models.SeatStatus;
 import com.example.demo.repositories.SeatRepository;
 
 @Service
@@ -46,7 +50,7 @@ public class SeatService {
         seatRepository.deleteById(seatId);
     }
 
-    public List<Seat> lockSeats(List<Long> seatIds, String userEmail) {
+    public List<Seat> lockSeats(List<Integer> seatIds, String userEmail) {
         List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
 
         for (Seat seat : seats) {
@@ -61,7 +65,7 @@ public class SeatService {
         return seatRepository.saveAll(seats);
     }
 
-    public boolean extendSeatLockIfPaymentInProgress(List<Long> seatIds, String userEmail) {
+    public boolean extendSeatLockIfPaymentInProgress(List<Integer> seatIds, String userEmail) {
         List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
         boolean extended = false;
 
@@ -69,9 +73,7 @@ public class SeatService {
             if (seat.getStatus() == SeatStatus.LOCKED && 
                 seat.getLockedBy().equals(userEmail) && 
                 seat.getLockedUntil().isBefore(LocalDateTime.now().plusMinutes(1))) {
-
-                // Extend lock time **ONLY ONCE**
-                seat.setLockedUntil(LocalDateTime.now().plusMinutes(3)); // Extend for 3 more minutes
+                seat.setLockedUntil(LocalDateTime.now().plusMinutes(3));
                 extended = true;
             }
         }
@@ -80,7 +82,7 @@ public class SeatService {
         return extended;
     }
 
-    public void confirmSeats(List<Long> seatIds) {
+    public void confirmSeats(List<Integer> seatIds) {
         List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
 
         for (Seat seat : seats) {
@@ -94,7 +96,7 @@ public class SeatService {
         seatRepository.saveAll(seats);
     }
 
-    public void releaseSeats(List<Long> seatIds) {
+    public void releaseSeats(List<Integer> seatIds) {
         List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
 
         for (Seat seat : seats) {
@@ -131,7 +133,7 @@ public class SeatService {
         Map<Integer, Integer> seatAmounts = new HashMap<>();
 
         for (Seat seat : seats) {
-            seatPrices.put(seat.getSeatId(), seat.getTier().getAmount());
+            seatAmounts.put(seat.getSeatId(), seat.getTier().getAmount());
         }
 
         return seatAmounts;

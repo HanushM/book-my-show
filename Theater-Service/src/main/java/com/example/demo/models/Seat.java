@@ -1,6 +1,12 @@
 package com.example.demo.models;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -16,7 +22,7 @@ public class Seat {
     private SeatStatus status;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name="tierId",nullable = false)
+	@JoinColumn(name="tier_id",referencedColumnName = "tierId",nullable = false)
 	private Tier tier;
 	private String lockedBy;
 	private LocalDateTime lockedUntil;
@@ -60,7 +66,6 @@ public class Seat {
 	public Tier getTier() {
     	return tier;
 	}
-
 	public void setTier(Tier tier) {
 		this.tier = tier;
 	}

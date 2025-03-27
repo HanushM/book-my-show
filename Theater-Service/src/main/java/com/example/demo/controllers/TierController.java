@@ -25,7 +25,10 @@ public class TierController {
 	TierService tierService;
 	
     @PostMapping("/addTier")
-    public ResponseEntity<Tier> addTier(@RequestBody Tier tier) {
+    public ResponseEntity<?> addTier(@RequestBody Tier tier) {
+    	if(tier.getScreen()==null || tier.getScreen().getScreenId()==0) {
+    		return new ResponseEntity<>("Screen is required", HttpStatus.BAD_REQUEST);
+    	}
         Tier newTier = tierService.addTier(tier);
         return new ResponseEntity<>(newTier, HttpStatus.CREATED);
     }
