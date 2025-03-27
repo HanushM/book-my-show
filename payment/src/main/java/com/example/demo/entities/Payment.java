@@ -10,53 +10,29 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
-    private String status;
-    private LocalDateTime timestamp;
-    private Double amount;
-    private String method; 
 
-    public enum PaymentStatus {
-        ACTIVE, SUCCESS, FAILURE
-    }
+    private String emailId;
+    private Double amount;
+    private String method;
+    private LocalDateTime timestamp;
+    private String status; // ACTIVE, SUCCESS, FAILURE
 
     // Getters and Setters
-    public Long getPaymentId() {
-        return paymentId;
-    }
+    public Long getPaymentId() { return paymentId; }
+    public void setPaymentId(Long paymentId) { this.paymentId = paymentId; }
 
-    public void setPaymentId(Long paymentId) {
-        this.paymentId = paymentId;
-    }
+    public String getEmailId() { return emailId; }
+    public void setEmailId(String emailId) { this.emailId = emailId; }
 
-    public String getStatus() {
-        return status;
-    }
+    public Double getAmount() { return amount; }
+    public void setAmount(Double amount) { this.amount = amount; }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public String getMethod() { return method; }
+    public void setMethod(String method) { this.method = method; }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
+    public LocalDateTime getTimestamp() { return timestamp; }
+    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

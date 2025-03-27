@@ -1,8 +1,8 @@
 package com.example.demo.controllers;
 
-import com.example.demo.entities.Payment;
 import com.example.demo.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,23 +12,17 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
-    // **Create a new payment**
+    // Create Payment
     @PostMapping("/create")
-    public Payment createPayment(
-                                 @RequestParam double amount,
-                                 @RequestParam String method) {
-        return paymentService.createPayment(amount, method);
+    public ResponseEntity<Void> createPayment(@RequestParam String emailId, @RequestParam String method) {
+        paymentService.createPayment(emailId, method);
+        return ResponseEntity.ok().build();
     }
 
-    // **Check Payment Status**
-    @GetMapping("/{bookingId}/status")
-    public String getPaymentStatus(@PathVariable Long bookingId) {
-        return paymentService.getPaymentStatus(bookingId);
-    }
-
-    // **Process Payment Status Randomly**
-    @PutMapping("/{paymentId}/process")
-    public void processRandomPayment(@PathVariable Long paymentId) {
-        paymentService.setPaymentStatus(paymentId);
+    // Generate Payment Status
+    @PostMapping("/status/{paymentId}")
+    public ResponseEntity<String> generatePaymentStatus(@PathVariable Long paymentId) {
+        String status = paymentService.generatePaymentStatus(paymentId);
+        return ResponseEntity.ok("Payment Status: " + status);
     }
 }
