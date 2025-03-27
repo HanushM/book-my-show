@@ -4,6 +4,7 @@ import com.example.demo.entities.Booking;
 import com.example.demo.repositories.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -12,6 +13,10 @@ public class BookingService {
 
     @Autowired
     private BookingRepository bookingRepository;
+    
+    private RestTemplate restTemplate;
+
+    private final String SEAT_SERVICE_URL = "http://localhost:8181/seat";
 
     
     public Booking createBooking(Long paymentId, String emailId, List<Long> seatIds) {
@@ -25,9 +30,15 @@ public class BookingService {
 
     // Cancel Booking
     public void cancelBooking(Long bookingId) {
-        if (!bookingRepository.existsById(bookingId)) {
-            throw new RuntimeException("Booking not found");
-        }
-        bookingRepository.deleteById(bookingId);
+    	Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+        
+        List<Long> seatIds = booking.getSeatIds(); // Assuming seatIds are stored in booking
+        restTemplate.put(SEAT_SERVICE_URL + "/release", seatIds);
+
+       
+        booking.setStatus("CANCELLED");
+        bookingRepository.save(booking);
     }
 }

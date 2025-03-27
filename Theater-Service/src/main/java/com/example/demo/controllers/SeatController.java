@@ -97,7 +97,7 @@ public class SeatController {
     }
     
     @GetMapping("/locked")
-    public List<Seat> getLockedSeats(@RequestParam String userEmail) {
+    public List<Integer> getLockedSeats(@RequestParam String userEmail) {
         return seatService.getLockedSeats(userEmail);
     }
 

@@ -20,40 +20,46 @@ public class PaymentService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String SEAT_SERVICE_URL = "http://localhost:8081/seats";
-    private final String BOOKING_SERVICE_URL = "http://localhost:8083/bookings";
-    // Create Payment
-    public  void createPayment(String emailId, String method) {
-        // Get locked seats for the user
-        List<Long> lockedSeats = restTemplate.getForObject(SEAT_SERVICE_URL + "/locked?userEmail=" + emailId, List.class);
+    private final String SEAT_SERVICE_URL = "http://localhost:8181/seat";
+    private final String BOOKING_SERVICE_URL = "http://localhost:8383/bookings";
+  
+    public  Long createPayment(String emailId, String method) {
+     
+        List<Integer> lockedSeats = restTemplate.getForObject(SEAT_SERVICE_URL + "/locked?userEmail=" + emailId, List.class);
 
         if (lockedSeats == null || lockedSeats.isEmpty()) {
             throw new RuntimeException("No locked seats found for user: " + emailId);
         }
 
-        // Get seat prices
-        Map<Integer, Integer> seatPrices = restTemplate.getForObject(SEAT_SERVICE_URL + "/prices?seatIds=" + lockedSeats, Map.class);
+        String seatIdsParam = lockedSeats.stream()
+        	    .map(String::valueOf)
+        	    .collect(Collectors.joining(","));
+
+        
+        	Map<Integer, Integer> seatPrices = restTemplate.getForObject(
+        	    SEAT_SERVICE_URL + "/prices?seatIds=" + seatIdsParam, Map.class);
 
         if (seatPrices == null) {
             throw new RuntimeException("Failed to fetch seat prices");
         }
 
-        // Calculate total amount
+        
         double totalAmount = seatPrices.values().stream().mapToDouble(Integer::doubleValue).sum();
 
-        // Create Payment object
         Payment payment = new Payment();
         payment.setEmailId(emailId);
         payment.setMethod(method);
         payment.setAmount(totalAmount);
         payment.setTimestamp(LocalDateTime.now());
         payment.setStatus("ACTIVE");
+        paymentRepository.save(payment);
+        return payment.getPaymentId();
     }
 
-    // Generate Payment Status
-    public String generatePaymentStatus(Long paymentId) {
+
+    public Payment generatePaymentStatus(Long paymentId) {
         Random random = new Random();
-        boolean isSuccess = random.nextBoolean(); // Randomly decide success or failure
+        boolean isSuccess = random.nextBoolean();
 
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new RuntimeException("Payment not found"));
@@ -64,11 +70,11 @@ public class PaymentService {
             if (lockedSeats != null && !lockedSeats.isEmpty()) {
                 restTemplate.postForObject(
                     BOOKING_SERVICE_URL + "/create?paymentId=" + paymentId + "&emailId=" + payment.getEmailId(),
-                    lockedSeats,  // Correctly passing seatIds as request body
-                    Void.class  // No need to handle response
+                    lockedSeats, 
+                    Void.class  
                 );
             }
-            paymentRepository.save(payment);
+            
         }
  else {
             payment.setStatus("FAILURE");
@@ -76,7 +82,7 @@ public class PaymentService {
                 restTemplate.put(SEAT_SERVICE_URL + "/release", lockedSeats);
             }
         }
-        return payment.getStatus();
+        return paymentRepository.save(payment);
         
        
     }

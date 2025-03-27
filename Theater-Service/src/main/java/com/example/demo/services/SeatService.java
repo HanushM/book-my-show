@@ -124,8 +124,8 @@ public class SeatService {
         seatRepository.saveAll(lockedSeats);
     }
 
-    public List<Seat> getLockedSeats(String userEmail) {
-        return seatRepository.findByStatusAndLockedBy(SeatStatus.LOCKED, userEmail);
+    public List<Integer> getLockedSeats(String userEmail) {
+        return seatRepository.findSeatIdsByStatusAndLockedBy(SeatStatus.LOCKED, userEmail);
     }
 
     public Map<Integer, Integer> getSeatAmount(List<Integer> seatIds) {
