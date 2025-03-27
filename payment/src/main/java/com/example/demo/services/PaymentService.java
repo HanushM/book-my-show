@@ -20,8 +20,8 @@ public class PaymentService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String SEAT_SERVICE_URL = "http://localhost:8181/seat";
-    private final String BOOKING_SERVICE_URL = "http://localhost:8383/bookings";
+    private final String SEAT_SERVICE_URL = "http://THEATER-SERVICE/seat";
+    private final String BOOKING_SERVICE_URL = "http://BOOKING/bookings";
   
     public  Long createPayment(String emailId, String method) {
      

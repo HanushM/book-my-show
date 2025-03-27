@@ -46,10 +46,11 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Documents\book-my-show"/>
 			<item value="C:\Grads\BOOKMYSHOW"/>
 		</list>
 		<section name="SmartImportWizard.dialogBounds">
-			<item key="DIALOG_X_ORIGIN" value="502"/>
+			<item key="DIALOG_X_ORIGIN" value="75"/>
 			<item key="DIALOG_Y_ORIGIN" value="40"/>
 			<item key="DIALOG_WIDTH" value="935"/>
 			<item key="DIALOG_HEIGHT" value="726"/>

@@ -16,7 +16,7 @@ public class BookingService {
     
     private RestTemplate restTemplate;
 
-    private final String SEAT_SERVICE_URL = "http://localhost:8181/seat";
+    private final String SEAT_SERVICE_URL = "http://THEATER-SERVICE/seat";
 
     
     public Booking createBooking(Long paymentId, String emailId, List<Long> seatIds) {
@@ -34,10 +34,8 @@ public class BookingService {
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
 
         
-        List<Long> seatIds = booking.getSeatIds(); // Assuming seatIds are stored in booking
+        List<Long> seatIds = booking.getSeatIds();
         restTemplate.put(SEAT_SERVICE_URL + "/release", seatIds);
-
-       
         booking.setStatus("CANCELLED");
         bookingRepository.save(booking);
     }
