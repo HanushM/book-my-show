@@ -1,0 +1,70 @@
+package com.example.demo.controllers;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.models.Tier;
+import com.example.demo.services.TierService;
+
+@RestController
+@RequestMapping("/tier")
+public class TierController {
+	@Autowired
+	TierService tierService;
+	
+    @PostMapping("/addTier")
+    public ResponseEntity<?> addTier(@RequestBody Tier tier) {
+    	if(tier.getScreen()==null || tier.getScreen().getScreenId()==0) {
+    		return ResponseEntity<>("Screen is required", HttpStatus.BAD_REQUEST);
+    	}
+        Tier newTier = tierService.addTier(tier);
+        return new ResponseEntity<>(newTier, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Tier>> getAllTiers() {
+        List<Tier> tiers = tierService.getAllTiers();
+        return new ResponseEntity<>(tiers, HttpStatus.OK);
+    }
+
+    @GetMapping("/{tierId}")
+    public ResponseEntity<Tier> getTierById(@PathVariable int tierId) {
+        Optional<Tier> tier = tierService.getTierById(tierId);
+        return tier.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/screen/{screenId}")
+    public ResponseEntity<List<Tier>> getTiersByScreen(@PathVariable int screenId) {
+        List<Tier> tiers = tierService.getTiersByScreen(screenId);
+        return new ResponseEntity<>(tiers, HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{tierId}")
+    public ResponseEntity<Tier> updateTier(@PathVariable int tierId, @RequestBody Tier updatedTier) {
+        try {
+            Tier tier = tierService.updateTier(tierId, updatedTier);
+            return new ResponseEntity<>(tier, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/delete/{tierId}")
+    public ResponseEntity<Void> deleteTier(@PathVariable int tierId) {
+        tierService.deleteTier(tierId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+	
+}

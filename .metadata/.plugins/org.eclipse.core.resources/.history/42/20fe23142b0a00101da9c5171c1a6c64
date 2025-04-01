@@ -1,0 +1,140 @@
+package com.example.demo.services;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.models.Seat;
+import com.example.demo.models.SeatStatus;
+import com.example.demo.repositories.SeatRepository;
+
+@Service
+public class SeatService {
+    @Autowired
+    private SeatRepository seatRepository;
+
+    public Seat addSeat(Seat seat) {
+        return seatRepository.save(seat);
+    }
+
+    public List<Seat> getAllSeats() {
+        return seatRepository.findAll();
+    }
+
+    public Optional<Seat> getSeatById(int seatId) {
+        return seatRepository.findById(seatId);
+    }
+
+    public List<Seat> getSeatsByTier(int tierId) {
+        return seatRepository.findByTier_TierId(tierId);
+    }
+
+    public Seat updateSeat(int seatId, Seat updatedSeat) {
+        Optional<Seat> existingSeat = seatRepository.findById(seatId);
+        if (existingSeat.isPresent()) {
+            Seat seat = existingSeat.get();
+            seat.setSeatNo(updatedSeat.getSeatNo());
+            seat.setStatus(updatedSeat.getStatus());
+            return seatRepository.save(seat);
+        } else {
+            throw new RuntimeException("Seat not found with ID: " + seatId);
+        }
+    }
+
+    public void deleteSeat(int seatId) {
+        seatRepository.deleteById(seatId);
+    }
+
+    public List<Seat> lockSeats(List<Long> seatIds, String userEmail) {
+        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
+
+        for (Seat seat : seats) {
+            if (seat.getStatus() != SeatStatus.AVAILABLE) {
+                throw new RuntimeException("Seat " + seat.getSeatNo() + " is not available");
+            }
+            seat.setStatus(SeatStatus.LOCKED);
+            seat.setLockedBy(userEmail);
+            seat.setLockedUntil(LocalDateTime.now().plusMinutes(5)); // Initial Lock - 5 minutes
+        }
+
+        return seatRepository.saveAll(seats);
+    }
+
+    public boolean extendSeatLockIfPaymentInProgress(List<Long> seatIds, String userEmail) {
+        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
+        boolean extended = false;
+
+        for (Seat seat : seats) {
+            if (seat.getStatus() == SeatStatus.LOCKED && 
+                seat.getLockedBy().equals(userEmail) && 
+                seat.getLockedUntil().isBefore(LocalDateTime.now().plusMinutes(1))) {
+
+                // Extend lock time **ONLY ONCE**
+                seat.setLockedUntil(LocalDateTime.now().plusMinutes(3)); // Extend for 3 more minutes
+                extended = true;
+            }
+        }
+
+        seatRepository.saveAll(seats);
+        return extended;
+    }
+
+    public void confirmSeats(List<Long> seatIds) {
+        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
+
+        for (Seat seat : seats) {
+            if (seat.getStatus() == SeatStatus.LOCKED) {
+                seat.setStatus(SeatStatus.BOOKED);
+                seat.setLockedBy(null);
+                seat.setLockedUntil(null);
+            }
+        }
+
+        seatRepository.saveAll(seats);
+    }
+
+    public void releaseSeats(List<Long> seatIds) {
+        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
+
+        for (Seat seat : seats) {
+            if (seat.getStatus() == SeatStatus.LOCKED) {
+                seat.setStatus(SeatStatus.AVAILABLE);
+                seat.setLockedBy(null);
+                seat.setLockedUntil(null);
+            }
+        }
+
+        seatRepository.saveAll(seats);
+    }
+
+    public void unlockExpiredSeats() {
+        List<Seat> lockedSeats = seatRepository.findByStatus(SeatStatus.LOCKED);
+
+        for (Seat seat : lockedSeats) {
+            if (seat.getLockedUntil() != null && seat.getLockedUntil().isBefore(LocalDateTime.now())) {
+                seat.setStatus(SeatStatus.AVAILABLE);
+                seat.setLockedBy(null);
+                seat.setLockedUntil(null);
+            }
+        }
+
+        seatRepository.saveAll(lockedSeats);
+    }
+
+    public List<Seat> getLockedSeats(String userEmail) {
+        return seatRepository.findByStatusAndLockedBy(SeatStatus.LOCKED, userEmail);
+    }
+
+    public Map<Integer, Integer> getSeatAmount(List<Integer> seatIds) {
+        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
+        Map<Integer, Integer> seatAmounts = new HashMap<>();
+
+        for (Seat seat : seats) {
+            seatPrices.put(seat.getSeatId(), seat.getTier().getAmount());
+        }
+
+        return seatAmounts;
+    }
+}
