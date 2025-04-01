@@ -48,4 +48,9 @@ public class UserService {
 		}
 		return false;
 	}
+    public boolean validateUser(String email, String password) {
+        Users user = getUser(email);
+        return user != null && user.getPassword().equals(password);
+    }
+
 }

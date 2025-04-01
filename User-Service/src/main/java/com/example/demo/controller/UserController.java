@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.JwtResponse;
+import com.example.demo.dto.LoginRequest;
 import com.example.demo.model.Users;
+import com.example.demo.service.JwtService;
 import com.example.demo.service.UserService;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.None;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+    private JwtService jwtService;
 	
 	@PostMapping("/add")
 	public ResponseEntity<Users> addUser(@RequestBody Users user) {
@@ -39,6 +41,16 @@ public class UserController {
 		return users!=null ? new ResponseEntity<>(users,HttpStatus.OK)
 						   : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
+    @PostMapping("/verifyUser")
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+        if (userService.validateUser(loginRequest.getEmailId(), loginRequest.getPassword())) {
+            String token = jwtService.generateToken(loginRequest.getEmailId());
+            return ResponseEntity.ok(new JwtResponse(token));
+        } else {
+            return ResponseEntity.status(401).body("Invalid credentials");
+        }
+    }
+
 	@PutMapping("/{emailId}")
 	public ResponseEntity<Users> updateUser(@PathVariable String emailId, @RequestBody Users user) {
         Users updatedUser = userService.updateUser(emailId, user);
