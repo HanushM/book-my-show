@@ -11,9 +11,9 @@ public interface MovieRepository extends MongoRepository<Movie, String> {
 
     List<Movie> findByGenre(String genre);
 
-    
     List<Movie> findByNameContainingIgnoreCase(String name);
 
+    List<Movie> findByCastContainingIgnoreCase(String cast);
 
-	
+    List<Movie> findByLanguagesContainingIgnoreCase(String language);
 }

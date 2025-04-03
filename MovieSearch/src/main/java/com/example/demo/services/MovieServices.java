@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class MovieServices {
 
-    private final MovieRepository movieRepository;
+    private MovieRepository movieRepository ;
 
     @Autowired
     public MovieServices(MovieRepository movieRepository) {
@@ -40,10 +40,11 @@ public class MovieServices {
             existingMovie.setReleaseDate(movieDetails.getReleaseDate());
             existingMovie.setLinkToTrailer(movieDetails.getLinkToTrailer());
             existingMovie.setCast(movieDetails.getCast());
+            existingMovie.setLanguages(movieDetails.getLanguages());
             existingMovie.setRating(movieDetails.getRating());
             existingMovie.setGenre(movieDetails.getGenre());
             existingMovie.setComments(movieDetails.getComments());
-            existingMovie.setImage(movieDetails.getImage());
+            existingMovie.setImageBase64(movieDetails.getImageBase64());
 
             return movieRepository.save(existingMovie);
         }
@@ -63,7 +64,14 @@ public class MovieServices {
     }
 
     public List<Movie> getMoviesByName(String name) {
-        String normalizedSearchTerm = name.trim();  
-        return movieRepository.findByNameContainingIgnoreCase(normalizedSearchTerm);
+        return movieRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    public List<Movie> getMoviesByCast(String cast) {
+        return movieRepository.findByCastContainingIgnoreCase(cast);
+    }
+
+    public List<Movie> getMoviesByLanguage(String language) {
+        return movieRepository.findByLanguagesContainingIgnoreCase(language);
     }
 }
