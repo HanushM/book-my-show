@@ -32,10 +32,10 @@ public class StatusService {
     @Autowired
     private StatusRepository statusRepository;
 
-    private static final String SHOW_SERVICE_URL = "http://SHOW-SERVICE";
+    private static final String SHOW_SERVICE_URL = "http://SHOWS";
 
     public void initializeSeatsForShow(long showId) {
-        String url = SHOW_SERVICE_URL + "/show/screenid/" + showId;
+        String url = SHOW_SERVICE_URL + "/shows/screenid/" + showId;
         ResponseEntity<Integer> response = restTemplate.getForEntity(url, Integer.class);
         
         Integer screenId = response.getBody();
@@ -137,6 +137,10 @@ public class StatusService {
                 .stream()
                 .map(status -> status.getSeat().getSeatId())
                 .collect(Collectors.toList());
+    }
+    
+    public List<Status> getSeatsByShowId(long showId) {
+        return statusRepository.findByShowId(showId);
     }
 
 }

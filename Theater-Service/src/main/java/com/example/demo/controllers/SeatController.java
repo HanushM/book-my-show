@@ -55,15 +55,15 @@ public class SeatController {
         return new ResponseEntity<>(seats, HttpStatus.OK);
     }
 
-    @PutMapping("/update/{seatId}")
-    public ResponseEntity<Seat> updateSeat(@PathVariable int seatId, @RequestBody Seat updatedSeat) {
-        try {
-            Seat seat = seatService.updateSeat(seatId, updatedSeat);
-            return new ResponseEntity<>(seat, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+//    @PutMapping("/update/{seatId}")
+//    public ResponseEntity<Seat> updateSeat(@PathVariable int seatId, @RequestBody Seat updatedSeat) {
+//        try {
+//            Seat seat = seatService.updateSeat(seatId, updatedSeat);
+//            return new ResponseEntity<>(seat, HttpStatus.OK);
+//        } catch (RuntimeException e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     @DeleteMapping("/delete/{seatId}")
     public ResponseEntity<Void> deleteSeat(@PathVariable int seatId) {

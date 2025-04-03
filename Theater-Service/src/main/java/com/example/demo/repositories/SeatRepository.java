@@ -17,8 +17,6 @@ public interface SeatRepository extends JpaRepository<Seat, Integer> {
 
     List<Seat> findBySeatIdIn(List<Integer> seatIds);
 
-    List<Seat> findByStatus(SeatStatus status);
-
     List<Seat> findByTier_TierIdIn(List<Integer> tierIds);
     
 }

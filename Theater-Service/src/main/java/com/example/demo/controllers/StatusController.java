@@ -53,4 +53,9 @@ public class StatusController {
     public List<Integer> getLockedSeats(@RequestParam long showId, @RequestParam String userEmail) {
         return statusService.getLockedSeats(showId, userEmail);
     }
+    
+    @GetMapping("/seats/{showId}")
+    public List<Status> getSeatsByShowId(@PathVariable long showId) {
+        return statusService.getSeatsByShowId(showId);
+    }
 }
