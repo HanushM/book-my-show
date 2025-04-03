@@ -10,6 +10,7 @@ public class Place {
 	private String city;
 	private String state;
 	private String country;
+	
 	public long getPinCode() {
 		return pinCode;
 	}

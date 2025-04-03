@@ -61,83 +61,7 @@ public class SeatService {
         seatRepository.deleteById(seatId);
     }
 
-    public List<Seat> lockSeats(List<Integer> seatIds, String userEmail) {
-        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
-
-        for (Seat seat : seats) {
-            if (seat.getStatus() != SeatStatus.AVAILABLE) {
-                throw new RuntimeException("Seat " + seat.getSeatNo() + " is not available");
-            }
-            seat.setStatus(SeatStatus.LOCKED);
-            seat.setLockedBy(userEmail);
-            seat.setLockedUntil(LocalDateTime.now().plusMinutes(5)); // Initial Lock - 5 minutes
-        }
-
-        return seatRepository.saveAll(seats);
-    }
-
-    public boolean extendSeatLockIfPaymentInProgress(List<Integer> seatIds, String userEmail) {
-        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
-        boolean extended = false;
-
-        for (Seat seat : seats) {
-            if (seat.getStatus() == SeatStatus.LOCKED && 
-                seat.getLockedBy().equals(userEmail) && 
-                seat.getLockedUntil().isBefore(LocalDateTime.now().plusMinutes(1))) {
-                seat.setLockedUntil(LocalDateTime.now().plusMinutes(3));
-                extended = true;
-            }
-        }
-
-        seatRepository.saveAll(seats);
-        return extended;
-    }
-
-    public void confirmSeats(List<Integer> seatIds) {
-        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
-
-        for (Seat seat : seats) {
-            if (seat.getStatus() == SeatStatus.LOCKED) {
-                seat.setStatus(SeatStatus.BOOKED);
-                seat.setLockedBy(null);
-                seat.setLockedUntil(null);
-            }
-        }
-
-        seatRepository.saveAll(seats);
-    }
-
-    public void releaseSeats(List<Integer> seatIds) {
-        List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
-
-        for (Seat seat : seats) {
-            if (seat.getStatus() == SeatStatus.LOCKED) {
-                seat.setStatus(SeatStatus.AVAILABLE);
-                seat.setLockedBy(null);
-                seat.setLockedUntil(null);
-            }
-        }
-
-        seatRepository.saveAll(seats);
-    }
-
-    public void unlockExpiredSeats() {
-        List<Seat> lockedSeats = seatRepository.findByStatus(SeatStatus.LOCKED);
-
-        for (Seat seat : lockedSeats) {
-            if (seat.getLockedUntil() != null && seat.getLockedUntil().isBefore(LocalDateTime.now())) {
-                seat.setStatus(SeatStatus.AVAILABLE);
-                seat.setLockedBy(null);
-                seat.setLockedUntil(null);
-            }
-        }
-
-        seatRepository.saveAll(lockedSeats);
-    }
-
-    public List<Integer> getLockedSeats(String userEmail) {
-        return seatRepository.findSeatIdsByStatusAndLockedBy(SeatStatus.LOCKED, userEmail);
-    }
+  
 
     public Map<Integer, Integer> getSeatAmount(List<Integer> seatIds) {
         List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
@@ -150,12 +74,4 @@ public class SeatService {
         return seatAmounts;
     }
     
-    public List<Seat> getSeatsByShowId(Long showId) {	
-        int screenId = restTemplate.getForObject("http://SHOWS/shows"+ "/screenid/" + showId, Integer.class);
-        System.out.print(screenId);
-     	List<Tier> tiers = tierRepository.findByScreen_ScreenId(screenId);
-         List<Integer> tierIds = tiers.stream().map(Tier::getTierId).toList();
-         System.out.println("Tier IDs: "+tierIds);
-         return seatRepository.findByTier_TierIdIn(tierIds);
-       }
 }

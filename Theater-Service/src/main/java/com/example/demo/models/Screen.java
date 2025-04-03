@@ -19,6 +19,7 @@ public class Screen {
 	@JoinColumn(name="theater_id", referencedColumnName = "theaterId",nullable = false)
 	private Theater theater;
 	
+	
 	public int getScreenId() {
 		return screenId;
 	}

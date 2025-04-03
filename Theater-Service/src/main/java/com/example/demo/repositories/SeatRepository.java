@@ -21,6 +21,4 @@ public interface SeatRepository extends JpaRepository<Seat, Integer> {
 
     List<Seat> findByTier_TierIdIn(List<Integer> tierIds);
     
-    @Query("SELECT s.seatId FROM Seat s WHERE s.status = :status AND s.lockedBy = :lockedBy")
-    List<Integer> findSeatIdsByStatusAndLockedBy(@Param("status") SeatStatus status, @Param("lockedBy") String lockedBy);
 }

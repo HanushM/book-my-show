@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -26,12 +27,14 @@ public class ApiGatewayApplication {
 							   .route(r->r.path("/screen/**").uri("http://localhost:8181"))
 							   .route(r->r.path("/tier/**").uri("http://localhost:8181"))
 							   .route(r->r.path("/seat/**").uri("http://localhost:8181"))
+							   .route(r->r.path("/status/**").uri("http://localhost:8181"))
 							   .route(r->r.path("/bookings/**").uri("http://localhost:8383"))
 							   .route(r->r.path("/payments/**").uri("http://localhost:8282"))
 							   .route(r->r.path("/shows/**").uri("http://localhost:8585")) 
 							   .build();
 	}
     @Bean
+    @LoadBalanced
     public CorsWebFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();

@@ -70,46 +70,10 @@ public class SeatController {
         seatService.deleteSeat(seatId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    @PostMapping("/lock")
-    public List<Seat> lockSeats(@RequestParam List<Integer> seatIds, @RequestParam String userEmail) {
-        return seatService.lockSeats(seatIds, userEmail);
-    }
-
-    @PutMapping("/extend-lock")
-    public boolean extendSeatLockIfPaymentInProgress(@RequestParam List<Integer> seatIds, @RequestParam String userEmail) {
-        return seatService.extendSeatLockIfPaymentInProgress(seatIds, userEmail);
-    }
-
-    @PutMapping("/confirm")
-    public void confirmSeats(@RequestBody List<Integer> seatIds) {
-        seatService.confirmSeats(seatIds);
-    }
-
-    @PutMapping("/release")
-    public void releaseSeats(@RequestParam List<Integer> seatIds) {
-        seatService.releaseSeats(seatIds);
-    }
-
-    @PutMapping("/unlockExpired")
-    public void unlockExpiredSeats() {
-        seatService.unlockExpiredSeats();
-    }
     
-    @GetMapping("/locked")
-    public List<Integer> getLockedSeats(@RequestParam String userEmail) {
-        return seatService.getLockedSeats(userEmail);
-    }
-
     @GetMapping("/prices")
     public ResponseEntity<Map<Integer, Integer>> getSeatAmount(@RequestParam List<Integer> seatIds) {
         Map<Integer, Integer> seatPrices = seatService.getSeatAmount(seatIds);
         return ResponseEntity.ok(seatPrices);
     }
-    @GetMapping("/by-show/{showId}")
-    public ResponseEntity<List<Seat>> getSeatsByShowId(@PathVariable Long showId){
-    	List<Seat> seats =seatService.getSeatsByShowId(showId);
-    	return seats.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(seats);
-    } 
- 
 }
