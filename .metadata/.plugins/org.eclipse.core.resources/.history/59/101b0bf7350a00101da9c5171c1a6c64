@@ -1,6 +1,0 @@
-spring.application.name=Theater-Service
-server.port=8181
-spring.datasource.url=jdbc:postgresql://localhost:5433/BookMyShow
-spring.datasource.username=postgres
-spring.datasource.password=tiger
-spring.jpa.hibernate.ddl-auto=create-drop

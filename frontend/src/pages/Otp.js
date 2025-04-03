@@ -4,9 +4,11 @@ function Otp(){
     const[secondValue,setSecondValue]=useState("");
     const[thirdValue,setThirdValue]=useState("");
     const[fourthValue,setFourthValue]=useState("");
+
     const handleSubmit=(e)=>{
         e.preventDefault();
     }
+    
     return(
         <div className="otp">
             <div>
