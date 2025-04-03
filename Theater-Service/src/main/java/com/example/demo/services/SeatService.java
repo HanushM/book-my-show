@@ -8,16 +8,27 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.models.Seat;
 import com.example.demo.models.SeatStatus;
+import com.example.demo.models.Tier;
 import com.example.demo.repositories.SeatRepository;
+import com.example.demo.repositories.TierRepository;
 
 @Service
 public class SeatService {
     @Autowired
     private SeatRepository seatRepository;
-
+    
+    @Autowired
+    private TierRepository tierRepository;
+    @Autowired
+    private RestTemplate restTemplate;
+ 
+    private final String SHOW_SERVICE_URL = "http://SHOWS/shows";
+    
+    
     public Seat addSeat(Seat seat) {
         return seatRepository.save(seat);
     }
@@ -138,4 +149,14 @@ public class SeatService {
 
         return seatAmounts;
     }
+    
+    public List<Seat> getSeatsByShowId(Long showId) {	
+        int screenId = restTemplate.getForObject("http://SHOWS/shows"+ "/screenid/" + showId, Integer.class);
+        System.out.print(screenId);
+     	List<Tier> tiers = tierRepository.findByScreen_ScreenId(screenId);
+     	System.out.print(tiers);
+         List<Integer> tierIds = tiers.stream().map(Tier::getTierId).toList();
+         System.out.println("Tier IDs: "+tierIds);
+         return seatRepository.findByTier_TierIdIn(tierIds);
+       }
 }

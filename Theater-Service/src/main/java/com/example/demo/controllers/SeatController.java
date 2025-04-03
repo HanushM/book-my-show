@@ -106,4 +106,10 @@ public class SeatController {
         Map<Integer, Integer> seatPrices = seatService.getSeatAmount(seatIds);
         return ResponseEntity.ok(seatPrices);
     }
+    @GetMapping("/by-show/{showId}")
+    public ResponseEntity<List<Seat>> getSeatsByShowId(@PathVariable Long showId){
+    	List<Seat> seats =seatService.getSeatsByShowId(showId);
+    	return seats.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(seats);
+    } 
+ 
 }

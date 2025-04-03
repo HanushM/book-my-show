@@ -28,6 +28,7 @@ public class ApiGatewayApplication {
 							   .route(r->r.path("/seat/**").uri("http://localhost:8181"))
 							   .route(r->r.path("/bookings/**").uri("http://localhost:8383"))
 							   .route(r->r.path("/payments/**").uri("http://localhost:8282"))
+							   .route(r->r.path("/shows/**").uri("http://localhost:8585")) 
 							   .build();
 	}
     @Bean
