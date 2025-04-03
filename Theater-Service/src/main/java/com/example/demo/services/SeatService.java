@@ -154,7 +154,6 @@ public class SeatService {
         int screenId = restTemplate.getForObject("http://SHOWS/shows"+ "/screenid/" + showId, Integer.class);
         System.out.print(screenId);
      	List<Tier> tiers = tierRepository.findByScreen_ScreenId(screenId);
-     	System.out.print(tiers);
          List<Integer> tierIds = tiers.stream().map(Tier::getTierId).toList();
          System.out.println("Tier IDs: "+tierIds);
          return seatRepository.findByTier_TierIdIn(tierIds);
