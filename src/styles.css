@@ -1,0 +1,332 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-color: #f4f4f4;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.6;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Header Styles */
+header {
+  background-color: #1a1a1a; /* Darker header for better contrast */
+  color: #fff;
+  padding: 20px 0;
+  text-align: center;
+  position: relative; /* Remove fixed positioning */
+  width: 100%;
+  z-index: 1000;
+}
+
+header h1 {
+  font-size: 2.5em;
+  margin: 0;
+}
+
+header p {
+  font-size: 1.2em;
+  margin-top: 10px;
+}
+
+/* Footer Styles */
+footer {
+  background-color: #1a1a1a; /* Dark footer to match header */
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+  width: 100%;
+  position: relative; /* Ensure footer is at the bottom of the page */
+  margin-top: 50px; /* Provide space above footer */
+}
+
+/* Navbar Styles */
+.navbar {
+  background-color: #333;
+  padding: 10px 20px;
+}
+
+.navbar ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-around;
+}
+
+.navbar li {
+  font-size: 1.2em;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+  color: #00aaff; /* Change hover color */
+}
+
+/* Movie List Styles */
+.movies {
+  padding: 30px 10%;
+}
+
+.movies-title {
+  text-align: center;
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.search-filter-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.search-filter-container input {
+  padding: 10px;
+  margin-right: 15px;
+  width: 200px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.search-filter-container select {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Flex Grid Layout for Movie Cards */
+.movie-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
+.movie-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.movie-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.movie-card:hover .movie-image {
+  transform: scale(1.05);
+}
+
+.content {
+  padding: 15px;
+  text-align: center;
+}
+
+.content h3 {
+  font-size: 1.4em;
+  margin-bottom: 10px;
+}
+
+.content p {
+  font-size: 1em;
+  margin-bottom: 10px;
+}
+
+.content a {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 1em;
+  text-decoration: none;
+  color: #007bff;
+}
+
+.content a:hover {
+  color: #0056b3;
+}
+
+/* Button Styles */
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Form Styles */
+input, textarea, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin: 10px 0;
+  background-color: #fff;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+label {
+  font-size: 1.1em;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Upload Page Styles */
+.upload {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.upload form {
+  width: 60%;
+  max-width: 800px;
+}
+
+.upload button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.upload button:hover {
+  background-color: #0056b3;
+}
+
+/* Scroll Behavior for Footer */
+footer {
+  position: relative;
+  margin-top: 30px;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+  .movies {
+    padding: 20px 5%;
+  }
+
+  .movie-container {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+
+  .upload form {
+    width: 80%;
+  }
+}
+
+/* Admin Panel Styles */
+.admin-panel {
+  background-color: #fff;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-panel header {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.admin-panel h1 {
+  font-size: 2.5em;
+}
+
+.admin-panel nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.admin-panel nav li {
+  font-size: 1.2em;
+}
+
+.admin-panel nav button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  font-size: 1.2em;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.admin-panel nav button:hover {
+  background-color: #0056b3;
+}
+
+.admin-panel main {
+  padding-top: 20px;
+}
+
+.admin-panel main > div {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Ensure the buttons are responsive */
+@media (max-width: 768px) {
+  .admin-panel nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .admin-panel nav li {
+    margin-bottom: 10px;
+  }
+
+  .admin-panel nav button {
+    font-size: 1.1em;
+    width: 100%;
+  }
+}
