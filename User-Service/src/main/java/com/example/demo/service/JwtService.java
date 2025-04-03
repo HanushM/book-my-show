@@ -4,14 +4,18 @@ package com.example.demo.service;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.stereotype.Service;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+@Service
 public class JwtService {
-	private static final String SECRET_KEY = "yourSecretKey";  
+	private static final String SECRET_KEY = "yourSuperSecretKeyThatIsAtLeast32CharactersLong123";
+  
 
     public String generateToken(String emailId) {
         return Jwts.builder()
