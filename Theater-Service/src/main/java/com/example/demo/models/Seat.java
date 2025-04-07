@@ -17,15 +17,9 @@ public class Seat {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int seatId;
 	private int seatNo;
-
-    @Enumerated(EnumType.STRING)
-    private SeatStatus status;
-
 	@ManyToOne(optional = false)
 	@JoinColumn(name="tier_id",referencedColumnName = "tierId",nullable = false)
 	private Tier tier;
-	private String lockedBy;
-	private LocalDateTime lockedUntil;
 	
 	public int getSeatId() {
 		return seatId;
@@ -39,29 +33,6 @@ public class Seat {
 	public void setSeatNo(int seatNo) {
 		this.seatNo = seatNo;
 	}
-
-    public SeatStatus getStatus() {
-        return status;
-    }
-    public void setStatus(SeatStatus status) {
-        this.status = status;
-    }
-
-    public String getLockedBy() {
-        return lockedBy;
-    }
-
-    public void setLockedBy(String lockedBy) {
-        this.lockedBy = lockedBy;
-    }
-
-    public LocalDateTime getLockedUntil() {
-        return lockedUntil;
-    }
-
-    public void setLockedUntil(LocalDateTime lockedUntil) {
-        this.lockedUntil = lockedUntil;
-    }	
 
 	public Tier getTier() {
     	return tier;

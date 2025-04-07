@@ -45,17 +45,17 @@ public class SeatService {
         return seatRepository.findByTier_TierId(tierId);
     }
 
-    public Seat updateSeat(int seatId, Seat updatedSeat) {
-        Optional<Seat> existingSeat = seatRepository.findById(seatId);
-        if (existingSeat.isPresent()) {
-            Seat seat = existingSeat.get();
-            seat.setSeatNo(updatedSeat.getSeatNo());
-            seat.setStatus(updatedSeat.getStatus());
-            return seatRepository.save(seat);
-        } else {
-            throw new RuntimeException("Seat not found with ID: " + seatId);
-        }
-    }
+//    public Seat updateSeat(int seatId, Seat updatedSeat) {
+//        Optional<Seat> existingSeat = seatRepository.findById(seatId);
+//        if (existingSeat.isPresent()) {
+//            Seat seat = existingSeat.get();
+//            seat.setSeatNo(updatedSeat.getSeatNo());
+//            seat.setStatus(updatedSeat.getStatus());
+//            return seatRepository.save(seat);
+//        } else {
+//            throw new RuntimeException("Seat not found with ID: " + seatId);
+//        }
+//    }
 
     public void deleteSeat(int seatId) {
         seatRepository.deleteById(seatId);
