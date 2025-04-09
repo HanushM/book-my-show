@@ -2,26 +2,56 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const TierForm = () => {
-  // State to hold form data
+  // State to hold form data for the tier
   const [tierData, setTierData] = useState({
     tierName: '',
     screenId: '', // Screen selection (screenId)
+    screenNo: '', // Screen number
     numberOfSeats: '', // Number of seats for the tier
     amount: '', // Amount for the tier
+    theaterId: '', // Store selected theaterId
   });
 
+  // State to hold available screens, theaters
   const [screens, setScreens] = useState([]);
+  const [theaters, setTheaters] = useState([]);
 
+  // Fetch theaters when the component mounts
   useEffect(() => {
-    // Fetch available screens to allow user to select a screen
-    axios.get('http://localhost:8080/screen/all')
+    axios.get('http://localhost:8080/theater/all')
       .then((response) => {
-        setScreens(response.data); // Populate screen list from the backend
+        setTheaters(response.data); // Populate theater list from the backend
       })
       .catch((error) => {
-        console.error('Error fetching screens:', error); // Handle errors
+        console.error('Error fetching theaters:', error);
       });
   }, []);
+
+  // Fetch screens based on the selected theaterId
+  useEffect(() => {
+    if (tierData.theaterId) {
+      axios.get(`http://localhost:8080/screen/screenList/${tierData.theaterId}`)
+        .then((response) => {
+          setScreens(response.data); // Populate screen list based on selected theater
+        })
+        .catch((error) => {
+          console.error('Error fetching screens:', error);
+        });
+    }
+  }, [tierData.theaterId]); // Dependency to fetch screens when theaterId changes
+
+  // Fetch the screenId when screenNo and theaterId are selected
+  useEffect(() => {
+    if (tierData.screenNo && tierData.theaterId) {
+      axios.get(`http://localhost:8080/screen/screenId?screenNo=${tierData.screenNo}&theaterId=${tierData.theaterId}`)
+        .then((response) => {
+          setTierData((prevData) => ({ ...prevData, screenId: response.data }));
+        })
+        .catch((error) => {
+          console.error('Error fetching screenId:', error);
+        });
+    }
+  }, [tierData.screenNo, tierData.theaterId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,11 +61,17 @@ const TierForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Check if screenId is valid
+    if (!tierData.screenId) {
+      alert('Please select a valid screen.');
+      return;
+    }
+
     // Structure the data according to the request body format for the tier
     const requestBody = {
       tierName: tierData.tierName,
       seatCount: tierData.numberOfSeats,
-      screen: { screenId: tierData.screenId },
+      screen: { screenId: tierData.screenId }, // Ensure screenId is passed correctly
       amount: tierData.amount,
     };
 
@@ -56,8 +92,10 @@ const TierForm = () => {
       setTierData({
         tierName: '',
         screenId: '',
+        screenNo: '', // Reset screenNo
         numberOfSeats: '',
         amount: '',
+        theaterId: '', // Clear the theaterId field
       });
     })
     .catch((error) => {
@@ -93,6 +131,39 @@ const TierForm = () => {
       <h1>Add New Tier</h1>
       <form onSubmit={handleSubmit}>
         <div>
+          <label>Theater:</label>
+          <select
+            name="theaterId"
+            value={tierData.theaterId}
+            onChange={handleChange}
+          >
+            <option value="">Select a theater</option>
+            {theaters.map((theater) => (
+              <option key={theater.theaterId} value={theater.theaterId}>
+                {theater.theaterName}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label>Screen:</label>
+          <select
+            name="screenNo"
+            value={tierData.screenNo}
+            onChange={handleChange}
+            disabled={!tierData.theaterId}  // Disable until a theater is selected
+          >
+            <option value="">Select a screen</option>
+            {screens.map((screen) => (
+              <option key={screen.screenId} value={screen.screenNo}>
+                Screen {screen.screenNo}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
           <label>Tier Name:</label>
           <input
             type="text"
@@ -101,21 +172,7 @@ const TierForm = () => {
             onChange={handleChange}
           />
         </div>
-        <div>
-          <label>Screen:</label>
-          <select
-            name="screenId"
-            value={tierData.screenId}
-            onChange={handleChange}
-          >
-            <option value="">Select a screen</option>
-            {screens.map((screen) => (
-              <option key={screen.screenId} value={screen.screenId}>
-                {screen.screenName}
-              </option>
-            ))}
-          </select>
-        </div>
+
         <div>
           <label>Number of Seats:</label>
           <input
@@ -125,6 +182,7 @@ const TierForm = () => {
             onChange={handleChange}
           />
         </div>
+
         <div>
           <label>Amount:</label>
           <input
@@ -134,6 +192,7 @@ const TierForm = () => {
             onChange={handleChange}
           />
         </div>
+
         <button type="submit">Add Tier</button>
       </form>
     </div>

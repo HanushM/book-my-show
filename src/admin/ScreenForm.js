@@ -4,7 +4,6 @@ import axios from 'axios';
 const ScreenForm = () => {
   const [screenData, setScreenData] = useState({
     screenNo: '',
-    screenName: '',
     capacity: '',
     theater: {
       theaterId: '', 
@@ -14,7 +13,6 @@ const ScreenForm = () => {
   const [theaters, setTheaters] = useState([]);
 
   useEffect(() => {
-
     axios.get('http://localhost:8080/theater/all')
       .then(response => {
         setTheaters(response.data);
@@ -36,10 +34,8 @@ const ScreenForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-
     const formData = { ...screenData };
 
-  
     axios
       .post('http://localhost:8080/screen/addScreen', formData, {
         headers: {
@@ -47,11 +43,9 @@ const ScreenForm = () => {
         },
       })
       .then((response) => {
-
         alert('Screen added successfully!');
         setScreenData({
           screenNo: '',
-          screenName: '',
           capacity: '',
           theater: {
             theaterId: '',
@@ -59,7 +53,6 @@ const ScreenForm = () => {
         });
       })
       .catch((error) => {
-       
         if (error.response) {
           console.error('Error response:', error.response);
           alert('Error adding screen: ' + error.response.data); 
@@ -83,15 +76,6 @@ const ScreenForm = () => {
             type="number"
             name="screenNo"
             value={screenData.screenNo}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Screen Name:</label>
-          <input
-            type="text"
-            name="screenName"
-            value={screenData.screenName}
             onChange={handleChange}
           />
         </div>

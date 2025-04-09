@@ -5,24 +5,28 @@ const ShowForm = () => {
   // State to hold form data for the show
   const [showData, setShowData] = useState({
     movieName: '',  // Store movieName instead of movieId
-    screenId: '',   // Screen selection (screenId)
+    screenNo: '',   // Screen selection (screenNo)
     startTime: '',  // Start time of the show
     endTime: '',    // End time of the show
     date: '',       // Date of the show
+    theaterId: '',  // Store selected theaterId
+    screenId: '',   // Store the selected screenId
   });
 
-  // State to hold available screens and movies
+  // State to hold available screens, movies, and theaters
   const [screens, setScreens] = useState([]);
   const [movies, setMovies] = useState([]);
+  const [theaters, setTheaters] = useState([]);
 
+  // Fetch theaters and movies when the component mounts
   useEffect(() => {
-    // Fetch available screens to allow user to select a screen
-    axios.get('http://localhost:8080/screen/all')
+    // Fetch available theaters to allow user to select a theater
+    axios.get('http://localhost:8080/theater/all')
       .then((response) => {
-        setScreens(response.data); // Populate screen list from the backend
+        setTheaters(response.data); // Populate theater list from the backend
       })
       .catch((error) => {
-        console.error('Error fetching screens:', error);
+        console.error('Error fetching theaters:', error);
       });
 
     // Fetch available movies to allow user to select a movie
@@ -35,6 +39,35 @@ const ShowForm = () => {
       });
   }, []);
 
+  // Fetch screens based on the selected theaterId
+  useEffect(() => {
+    if (showData.theaterId) {
+      axios.get(`http://localhost:8080/screen/screenList/${showData.theaterId}`)
+        .then((response) => {
+          setScreens(response.data); // Populate screen list based on selected theater
+        })
+        .catch((error) => {
+          console.error('Error fetching screens:', error);
+        });
+    }
+  }, [showData.theaterId]); // Dependency to fetch screens when theaterId changes
+
+  // Fetch screenId based on the selected screenNo and theaterId
+  useEffect(() => {
+    if (showData.screenNo && showData.theaterId) {
+      axios.get(`http://localhost:8080/screen/screenId?num=${showData.screenNo}&theaterId=${showData.theaterId}`)
+        .then((response) => {
+          setShowData((prevState) => ({
+            ...prevState,
+            screenId: response.data, // Set the screenId from the backend
+          }));
+        })
+        .catch((error) => {
+          console.error('Error fetching screenId:', error);
+        });
+    }
+  }, [showData.screenNo, showData.theaterId]); // Dependency to fetch screenId when screenNo or theaterId changes
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setShowData({ ...showData, [name]: value }); // Update state on change
@@ -46,7 +79,7 @@ const ShowForm = () => {
     // Structure the data according to the request body format for the showtime
     const requestBody = {
       movieName: showData.movieName, // Send movieName instead of movieId
-      screenId: showData.screenId,
+      screenId: showData.screenId,   // Send the selected screenId
       startTime: showData.startTime,
       endTime: showData.endTime,
       date: showData.date,
@@ -63,10 +96,12 @@ const ShowForm = () => {
       // Reset form fields after success
       setShowData({
         movieName: '',
-        screenId: '',
+        screenNo: '',
         startTime: '',
         endTime: '',
         date: '',
+        theaterId: '', // Clear the theaterId field as well
+        screenId: '',  // Clear the screenId field
       });
     })
     .catch((error) => {
@@ -87,24 +122,41 @@ const ShowForm = () => {
           >
             <option value="">Select a movie</option>
             {movies.map((movie) => (
-              <option key={movie.movieName} value={movie.name}> {/* Store movie name in the state */}
-                {movie.name} {/* Display movie name */}
+              <option key={movie.movieName} value={movie.name}>
+                {movie.name}
               </option>
             ))}
           </select>
         </div>
 
         <div>
-          <label>Screen:</label>
+          <label>Theater:</label>
           <select
-            name="screenId"
-            value={showData.screenId}
+            name="theaterId"
+            value={showData.theaterId}
             onChange={handleChange}
+          >
+            <option value="">Select a theater</option>
+            {theaters.map((theater) => (
+              <option key={theater.theaterId} value={theater.theaterId}>
+                {theater.theaterName}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label>Screen No:</label>
+          <select
+            name="screenNo"
+            value={showData.screenNo}
+            onChange={handleChange}
+            disabled={!showData.theaterId}  // Disable until a theater is selected
           >
             <option value="">Select a screen</option>
             {screens.map((screen) => (
-              <option key={screen.screenId} value={screen.screenId}>
-                {screen.screenName}
+              <option key={screen} value={screen}>
+                Screen {screen}
               </option>
             ))}
           </select>
