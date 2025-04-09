@@ -11,7 +11,9 @@ import com.example.demo.service.ShowtimeService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/shows")
@@ -40,6 +42,22 @@ public class ShowtimeController {
     @GetMapping("/date/{date}")
     public List<Show> getShowtimesByDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return showtimeService.getShowtimesByDate(date);
+    }
+    
+    @GetMapping("/screen-times")
+    public List<Map<String, Object>> getScreenIdAndStartTime(
+            @RequestParam String movieName,
+            @RequestParam String date
+    ) {
+        LocalDate localDate = LocalDate.parse(date);
+        List<Object[]> results = showtimeService.getScreenIdAndStartTimeByMovieAndDate(movieName, localDate);
+
+        return results.stream().map(obj -> Map.of(
+        		
+        		"timeId", obj[0],
+                "screenId", obj[1],
+                "startTime", obj[2]
+        )).collect(Collectors.toList());
     }
 
 

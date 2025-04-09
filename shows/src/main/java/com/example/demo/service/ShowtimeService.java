@@ -3,6 +3,7 @@ package com.example.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.entity.Show;
 import com.example.demo.repos.ShowtimeRepository;
@@ -13,9 +14,13 @@ import java.util.Optional;
 
 @Service
 public class ShowtimeService {
+	private static final String STATUS_URL= "http://THEATER-SERVICE/status";
 
     @Autowired
     private ShowtimeRepository showtimeRepository;
+    
+    @Autowired
+    private RestTemplate restTemplate;
     
     public Integer getScreenIdByShowId(Long showId) {
         return showtimeRepository.findById(showId)
@@ -35,9 +40,18 @@ public class ShowtimeService {
         return showtimeRepository.findByDate(date);
     }
 
-    public Show saveShowtime(Show showtime) {
-        return showtimeRepository.save(showtime);
+    public Show saveShowtime(Show showTime) {
+        
+        Show returnVal=showtimeRepository.save(showTime);
+        restTemplate.postForObject(STATUS_URL + "/add?showId=" + showTime.getTimeId(), null, String.class);
+        return returnVal;
     }
+
+    public List<Object[]> getScreenIdAndStartTimeByMovieAndDate(String movieName, LocalDate date) {
+        return showtimeRepository.findScreenIdAndStartTimeByMovieNameAndDate(movieName, date);
+    }
+
+    
 
     public void deleteShowtime(Long id) {
         showtimeRepository.deleteById(id);

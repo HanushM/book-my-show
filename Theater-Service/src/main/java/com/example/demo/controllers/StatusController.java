@@ -15,8 +15,8 @@ public class StatusController {
     @Autowired
     private StatusService statusService;
 
-    @PostMapping("/initialize/{showId}")
-    public ResponseEntity<String> initializeSeats(@PathVariable long showId) {
+    @PostMapping("/add")
+    public ResponseEntity<String> initializeSeats(@RequestParam long showId) {
         statusService.initializeSeatsForShow(showId);
         return ResponseEntity.ok("Seats initialized for showId: " + showId);
     }

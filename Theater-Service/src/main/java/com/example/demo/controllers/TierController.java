@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.models.Seat;
 import com.example.demo.models.Tier;
 import com.example.demo.services.TierService;
 
@@ -23,6 +24,7 @@ import com.example.demo.services.TierService;
 public class TierController {
 	@Autowired
 	TierService tierService;
+	
 	
     @PostMapping("/addTier")
     public ResponseEntity<?> addTier(@RequestBody Tier tier) {

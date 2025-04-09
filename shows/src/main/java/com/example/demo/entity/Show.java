@@ -12,7 +12,7 @@ public class Show {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long timeId;
 
-    private Long movieId;
+    private String movieName;
     private int screenId;
     private LocalTime startTime;
     private LocalTime endTime;
@@ -23,11 +23,11 @@ public class Show {
 	public void setTimeId(Long timeId) {
 		this.timeId = timeId;
 	}
-	public Long getMovieId() {
-		return movieId;
+	public String getMovieName() {
+		return movieName;
 	}
-	public void setMovieId(Long movieId) {
-		this.movieId = movieId;
+	public void setMovieName(String movieName) {
+		this.movieName = movieName;
 	}
 	public int getScreenId() {
 		return screenId;

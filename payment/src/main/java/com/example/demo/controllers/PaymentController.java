@@ -16,11 +16,11 @@ public class PaymentController {
 
     // Create Payment
     @PostMapping("/create")
-    public ResponseEntity<Long> createPayment(
+    public ResponseEntity<Long> createPayment(@RequestParam long showId,
             @RequestParam String emailId, 
             @RequestParam String method) {
         
-        Long paymentId = paymentService.createPayment(emailId, method);
+        Long paymentId = paymentService.createPayment(showId,emailId, method);
         return ResponseEntity.ok(paymentId);
     }
 

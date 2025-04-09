@@ -11,11 +11,18 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
 
-    private String emailId;
+    public Long getShowId() {
+		return showId;
+	}
+	public void setShowId(Long showId) {
+		this.showId = showId;
+	}
+	private String emailId;
     private Double amount;
     private String method;
     private LocalDateTime timestamp;
     private String status; // ACTIVE, SUCCESS, FAILURE
+    private Long showId;
 
     // Getters and Setters
     public Long getPaymentId() { return paymentId; }

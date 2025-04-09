@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMapping"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PutMapping"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.DeleteMapping"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestBody"/>
@@ -39,7 +36,6 @@
     <fullyQualifiedTypeName name="com.example.demo.service.SeatService"/>
     <fullyQualifiedTypeName name="com.example.demo.repository.SeatRepository"/>
     <fullyQualifiedTypeName name="com.example.demo.entity.Seat"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestParam"/>
     <fullyQualifiedTypeName name="jakarta.persistence.Enumerated"/>
     <fullyQualifiedTypeName name="jakarta.persistence.EnumType"/>
     <fullyQualifiedTypeName name="java.util.Optional"/>
@@ -60,4 +56,8 @@
     <fullyQualifiedTypeName name="java.awt.RenderingHints.Key"/>
     <fullyQualifiedTypeName name="io.jsonwebtoken.io.Decoders"/>
     <fullyQualifiedTypeName name="io.jsonwebtoken.security.Keys"/>
+    <fullyQualifiedTypeName name="org.springframework.web.client.RestTemplate"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestParam"/>
+    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.Query"/>
+    <fullyQualifiedTypeName name="org.springframework.data.repository.query.Param"/>
 </qualifiedTypeNameHistroy>

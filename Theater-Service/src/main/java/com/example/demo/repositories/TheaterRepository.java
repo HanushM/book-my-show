@@ -8,4 +8,5 @@ import com.example.demo.models.Theater;
 
 public interface TheaterRepository extends JpaRepository<Theater, Integer> {
 	List<Theater> findByPlace_PinCode(long pinCode);
+
 }

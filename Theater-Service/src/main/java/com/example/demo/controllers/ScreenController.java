@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.models.Screen;
+import com.example.demo.models.Theater;
 import com.example.demo.services.ScreenService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -68,4 +70,25 @@ public class ScreenController {
         screenService.deleteScreen(screenId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    
+    @GetMapping("/theater-id/{screenId}")
+    public Theater getTheaterByScreen(@PathVariable int screenId) {
+        return screenService.getTheaterByScreenId(screenId);
+    }
+    
+    @GetMapping("/screenList/{theaterId}")
+    public ResponseEntity<List<Integer>> getScreenNoByTheaterId(@PathVariable int theaterId) {
+        List<Integer> screenNumbers = screenService.getScreenNoByTheaterId(theaterId);
+        if (screenNumbers.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // Return 404 if no screens are found
+        }
+        return new ResponseEntity<>(screenNumbers, HttpStatus.OK);  // Return 200 OK with the list
+    }
+    
+    @GetMapping("/screenId")
+    public Integer getScreenId(@RequestParam int num,@RequestParam int theaterId)
+    {
+ 	   return  screenService.getScreenId(num, theaterId);
+    }
+
 }

@@ -42,8 +42,10 @@ public class StatusService {
         if (screenId == null) {
             throw new RuntimeException("Screen ID not found for showId: " + showId);
         }
+        System.out.println(screenId);
         List<Tier> tiers = tierRepository.findByScreen_ScreenId(screenId);
         List<Integer> tierIds = tiers.stream().map(Tier::getTierId).collect(Collectors.toList());
+        System.out.println(tierIds);
         List<Seat> seats = seatRepository.findByTier_TierIdIn(tierIds);
         List<Status> statusList = seats.stream().map(seat -> {
             Status status = new Status();
