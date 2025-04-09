@@ -1,23 +1,34 @@
+// MovieCard.js
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const MovieCard = ({ movie }) => {
-  if (!movie) {
-    return <div>Loading...</div>;
-  }
+  const navigate = useNavigate();
 
-  const { imageBase64, name, genre, releaseDate, rating, cast, comments, linkToTrailer } = movie;
+  if (!movie) return <div>Loading...</div>;
 
-  const imageUrl = imageBase64 
-    ? `data:image/jpeg;base64,${imageBase64}` 
-    : 'path_to_default_image_or_placeholder.png'; 
+  const {
+    imageBase64,
+    name,
+    genre,
+    releaseDate,
+    rating,
+    cast,
+    comments,
+    linkToTrailer,
+  } = movie;
+
+  const imageUrl = imageBase64
+    ? `data:image/jpeg;base64,${imageBase64}`
+    : 'path_to_default_image_or_placeholder.png';
+
+  const handleDoubleClick = () => {
+    navigate('/shows', { state: { movieName: name } });
+  };
 
   return (
-    <div className="movie-card">
-      <img 
-        src={imageUrl} 
-        alt={name || 'Movie Poster'} 
-        className="movie-image" 
-      />
+    <div className="movie-card" onDoubleClick={handleDoubleClick}>
+      <img src={imageUrl} alt={name || 'Movie Poster'} className="movie-image" />
       <div className="content">
         <h3>{name || 'Unnamed Movie'}</h3>
         <p><strong>Genre:</strong> {genre || 'N/A'}</p>

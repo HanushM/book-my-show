@@ -20,7 +20,7 @@ const PlaceForm = () => {
     const formData = { ...placeData };
     console.log(formData);
   
-    axios.post('http://localhost:8181/place/add', formData, {
+    axios.post('http://localhost:8080/place/add', formData, {
       headers: {
         'Content-Type': 'application/json', 
       },

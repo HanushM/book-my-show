@@ -27,7 +27,9 @@ const Movies = () => {
     const matchesGenre = genreFilter === 'All' || movie.genre === genreFilter;
     return matchesSearch && matchesGenre;
   });
+ 
 
+  
   return (
     <div className="movies">
       <h1 className="movies-title">Movies List</h1>

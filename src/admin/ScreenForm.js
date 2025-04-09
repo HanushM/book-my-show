@@ -7,15 +7,15 @@ const ScreenForm = () => {
     screenName: '',
     capacity: '',
     theater: {
-      theaterId: '', // Initialize the theater object with theaterId field
+      theaterId: '', 
     },
   });
 
   const [theaters, setTheaters] = useState([]);
 
   useEffect(() => {
-    // Fetch theaters data to allow the user to select a theater
-    axios.get('http://localhost:8686/theater/all')
+
+    axios.get('http://localhost:8080/theater/all')
       .then(response => {
         setTheaters(response.data);
       })
@@ -36,18 +36,18 @@ const ScreenForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Prepare form data
+
     const formData = { ...screenData };
 
-    // Send POST request
+  
     axios
-      .post('http://localhost:8181/screen/addScreen', formData, {
+      .post('http://localhost:8080/screen/addScreen', formData, {
         headers: {
-          'Content-Type': 'application/json', // Ensure the content type is JSON
+          'Content-Type': 'application/json', 
         },
       })
       .then((response) => {
-        // Handle success
+
         alert('Screen added successfully!');
         setScreenData({
           screenNo: '',
@@ -59,10 +59,10 @@ const ScreenForm = () => {
         });
       })
       .catch((error) => {
-        // Handle error
+       
         if (error.response) {
           console.error('Error response:', error.response);
-          alert('Error adding screen: ' + error.response.data); // More specific error message
+          alert('Error adding screen: ' + error.response.data); 
         } else if (error.request) {
           console.error('Error request:', error.request);
           alert('Error adding screen: No response from the server');

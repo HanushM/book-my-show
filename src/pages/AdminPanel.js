@@ -4,7 +4,7 @@ import PlaceForm from '../admin/PlaceForm';
 import ScreenForm from '../admin/ScreenForm';
 import TheaterForm  from '../admin/TheaterForm';
 import TierForm from '../admin/TierForm';
-//import SeatForm from '../admin/SeatForm';
+import ShowForm from '../admin/ShowForm';
 
 
 const AdminPanel = () => {
@@ -24,7 +24,7 @@ const AdminPanel = () => {
             <li><button onClick={() => handleButtonClick('place')}>Add Place</button></li>
             <li><button onClick={() => handleButtonClick('screen')}>Add Screen</button></li>
             <li><button onClick={() => handleButtonClick('theater')}>Add Theater</button></li>
-            {/*<li><button onClick={() => handleButtonClick('seat')}>Add Seat</button></li>*/}
+            <li><button onClick={() => handleButtonClick('show')}>Add Show</button></li>
             <li><button onClick={() => handleButtonClick('tier')}>Add Tier</button></li>
           </ul>
         </nav>
@@ -35,7 +35,7 @@ const AdminPanel = () => {
         {currentForm === 'place' && <PlaceForm />}
         {currentForm === 'screen' && <ScreenForm />}
         {currentForm === 'theater' && <TheaterForm />}
-        {/*{currentForm === 'seat' && <SeatForm />}*/}
+        {currentForm === 'show' && <ShowForm />}
         {currentForm === 'tier' && <TierForm />}
       </main>
     </div>

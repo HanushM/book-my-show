@@ -11,7 +11,7 @@ const TheaterForm = () => {
 
   useEffect(() => {
     // Fetch places data to allow the user to select a place
-    axios.get('http://localhost:8686/place/all') // Fetching all places
+    axios.get('http://localhost:8080/place/all') // Fetching all places
       .then(response => {
         setPlaces(response.data); // Store fetched places in state
       })
@@ -38,7 +38,7 @@ const TheaterForm = () => {
 
     // Send the POST request to add the new theater
     axios
-      .post('http://localhost:8181/theater/add', formData)
+      .post('http://localhost:8080/theater/add', formData)
       .then((response) => {
         alert('Theater added successfully!');
         setTheaterData({

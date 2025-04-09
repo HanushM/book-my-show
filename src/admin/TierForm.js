@@ -14,7 +14,7 @@ const TierForm = () => {
 
   useEffect(() => {
     // Fetch available screens to allow user to select a screen
-    axios.get('http://localhost:8686/screen/all')
+    axios.get('http://localhost:8080/screen/all')
       .then((response) => {
         setScreens(response.data); // Populate screen list from the backend
       })
@@ -31,7 +31,7 @@ const TierForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Structure the data according to the request body format
+    // Structure the data according to the request body format for the tier
     const requestBody = {
       tierName: tierData.tierName,
       seatCount: tierData.numberOfSeats,
@@ -39,24 +39,53 @@ const TierForm = () => {
       amount: tierData.amount,
     };
 
-    // Send the structured data to the backend
-    axios.post('http://localhost:8181/tier/addTier', requestBody, {
+    // Send the structured data to the backend to add a tier
+    axios.post('http://localhost:8080/tier/addTier', requestBody, {
       headers: {
         'Content-Type': 'application/json',
       },
     })
     .then((response) => {
+      const createdTier = response.data; // Get created tier data from the response
       alert('Tier added successfully!');
+
+      // Now that the tier is created, add seats for the new tier
+      addSeats(createdTier.tierId, tierData.numberOfSeats);
+      
+      // Reset form fields after success
       setTierData({
         tierName: '',
         screenId: '',
         numberOfSeats: '',
         amount: '',
-      }); // Reset form fields after success
+      });
     })
     .catch((error) => {
       alert('Error adding tier: ' + error.message); // Handle errors
     });
+  };
+
+  // Function to add seats for the created tier
+  const addSeats = (tierId, numberOfSeats) => {
+    for (let i = 1; i <= numberOfSeats; i++) {
+      const seatData = {
+        seatNo: i,
+        tier: { tierId: tierId }, // Reference the created tier
+      };
+
+      // Call the backend to add seats to the newly created tier
+      axios.post('http://localhost:8080/seat/addSeat', seatData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
+        console.log(`Seat ${i} added successfully.`);
+      })
+      .catch((error) => {
+        console.error('Error adding seat:', error);
+      });
+    }
   };
 
   return (
