@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Profile from "../components/Profile";
 import "../styles/Header.css";
+
 function Header({ onUploadClick }) {
     const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -36,6 +37,7 @@ function Header({ onUploadClick }) {
         <>
             <header className="header-container">
                 <img src="Logo.png" alt="BookMyShow Logo" className="logo" />
+
 
                 <img
                     src="user.png"
