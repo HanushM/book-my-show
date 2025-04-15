@@ -5,12 +5,6 @@ function Login(){
     const[userName,setUserName]=useState("");
     const[password,setUserPassword]=useState("");
     const navigate = useNavigate();
-
-    useEffect(()=>{
-        if(localStorage.getItem("token")){
-            navigate("/main");
-        }
-    },[]);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,6 +16,7 @@ function Login(){
 
             if (response.status === 200) {
                 localStorage.setItem("token", response.data.token);
+                localStorage.setItem("role", response.data.role);
                 alert("Login successful!");
                 navigate("/main");
             }

@@ -8,13 +8,7 @@ function Register() {
     const [userEmail, setUserEmail] = useState("");
     const [confirmpassword, setConfirmPassword] = useState("");
     const [mobileNo, setMobileNo] = useState("");
-    const navigate = useNavigate("");
-
-    useEffect(()=>{
-        if(localStorage.getItem("token")){
-            navigate("/main")
-        }
-    },[]);
+    const navigate = useNavigate();
     
     const handleSubmit = async (e) => {
         e.preventDefault();

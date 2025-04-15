@@ -4,15 +4,15 @@ import Header from "../components/Header";
 import { useEffect } from "react";
 
 const Landing=()=>{
-    const navigate = useNavigate("");
+    const navigate = useNavigate();
 
-    useEffect(()=>{
-        if(localStorage.getItem("token")){
+    useEffect(() => {
+        if (localStorage.getItem("token")) {
             navigate("/main");
         }
-    });
+    }, [navigate]);
     
-    return(
+        return(
         <div className="landing">
             <header>
                 <Header/>
