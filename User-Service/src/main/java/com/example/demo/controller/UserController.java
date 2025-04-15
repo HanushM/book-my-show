@@ -41,15 +41,16 @@ public class UserController {
 		return users!=null ? new ResponseEntity<>(users,HttpStatus.OK)
 						   : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
-    @PostMapping("/verifyUser")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        if (userService.validateUser(loginRequest.getEmailId(), loginRequest.getPassword())) {
-            String token = jwtService.generateToken(loginRequest.getEmailId());
-            return ResponseEntity.ok(new JwtResponse(token));
-        } else {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
-    }
+	@PostMapping("/verifyUser")
+	public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+	    if (userService.validateUser(loginRequest.getEmailId(), loginRequest.getPassword())) {
+	    	Users user = userService.getUser(loginRequest.getEmailId());
+	    	String token = jwtService.generateToken(user.getEmailId(), user.getRole());
+	        return ResponseEntity.ok(new JwtResponse(token, user.getRole()));
+	    } else {
+	        return ResponseEntity.status(401).body("Invalid credentials");
+	    }
+	}
 
 	@PutMapping("/{emailId}")
 	public ResponseEntity<Users> updateUser(@PathVariable String emailId, @RequestBody Users user) {

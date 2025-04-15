@@ -10,12 +10,12 @@ import org.springframework.data.repository.query.Param;
 import com.example.demo.models.Seat;
 import com.example.demo.models.SeatStatus;
 
-public interface SeatRepository extends JpaRepository<Seat, Integer> {
+public interface SeatRepository extends JpaRepository<Seat, Long> {
 	List<Seat> findByTier_TierId(int tierId);
     
     Optional<Seat> findBySeatNoAndTier_TierId(int seatNo, int tierId);
 
-    List<Seat> findBySeatIdIn(List<Integer> seatIds);
+    List<Seat> findBySeatIdIn(List<Long> seatIds);
 
     List<Seat> findByTier_TierIdIn(List<Integer> tierIds);
     

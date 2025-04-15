@@ -28,7 +28,11 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    // Cancel Booking
+    public Booking getBookingByPaymentId(Long paymentId) {
+    	return bookingRepository.findByPaymentId(paymentId)
+                .orElseThrow(() -> new RuntimeException("Booking not found for paymentId: " + paymentId));
+    }
+    
     public void cancelBooking(Long bookingId) {
     	Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));

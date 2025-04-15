@@ -15,7 +15,7 @@ import jakarta.persistence.ManyToOne;
 public class Seat {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int seatId;
+	private Long seatId;
 	private int seatNo;
 
 	@ManyToOne(optional = false)
@@ -23,10 +23,10 @@ public class Seat {
 	private Tier tier;
 
 	
-	public int getSeatId() {
+	public Long getSeatId() {
 		return seatId;
 	}
-	public void setSeatId(int seatId) {
+	public void setSeatId(Long seatId) {
 		this.seatId = seatId;
 	}
 	public int getSeatNo() {

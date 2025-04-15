@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dto.PaymentSummary;
 import com.example.demo.entities.Payment;
 import com.example.demo.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +17,22 @@ public class PaymentController {
 
     // Create Payment
     @PostMapping("/create")
-    public ResponseEntity<Long> createPayment(
+    public ResponseEntity<Long> createPayment(@RequestParam long showId,
             @RequestParam String emailId, 
             @RequestParam String method) {
-        
-        Long paymentId = paymentService.createPayment(emailId, method);
+        Long paymentId = paymentService.createPayment(showId,emailId, method);
         return ResponseEntity.ok(paymentId);
     }
 
     // Generate Payment Status
-    @PostMapping("/status/{paymentId}")
+    @GetMapping("/status/{paymentId}")
     public ResponseEntity<Payment> generatePaymentStatus(@PathVariable Long paymentId) {
         Payment payment = paymentService.generatePaymentStatus(paymentId);
         return ResponseEntity.status(HttpStatus.OK).body(payment);
     }
+    
+    @GetMapping("/summary")
+    public ResponseEntity<PaymentSummary> getSummary(@RequestParam Long paymentId) {
+        return ResponseEntity.ok(paymentService.getPaymentSummary(paymentId));
+    } 
 }

@@ -16,8 +16,9 @@ public class Payment {
     private String method;
     private LocalDateTime timestamp;
     private String status; // ACTIVE, SUCCESS, FAILURE
-
-    // Getters and Setters
+    private long showId;
+    
+    
     public Long getPaymentId() { return paymentId; }
     public void setPaymentId(Long paymentId) { this.paymentId = paymentId; }
 
@@ -35,4 +36,12 @@ public class Payment {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+	public long getShowId() {
+		return showId;
+	}
+	public void setShowId(long showId) {
+		this.showId = showId;
+	}
+    
+    
 }

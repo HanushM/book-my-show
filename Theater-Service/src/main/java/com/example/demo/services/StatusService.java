@@ -57,7 +57,7 @@ public class StatusService {
         statusRepository.saveAll(statusList);
     }
     
-    public List<Status> lockSeats(long showId, List<Integer> seatIds, String userEmail) {
+    public List<Status> lockSeats(long showId, List<Long> seatIds, String userEmail) {
         List<Status> statuses = statusRepository.findByShowIdAndSeat_SeatIdIn(showId, seatIds);
 
         for (Status status : statuses) {
@@ -67,6 +67,7 @@ public class StatusService {
             status.setStatus(SeatStatus.LOCKED);
             status.setLockedBy(userEmail);
             status.setLockedUntil(LocalDateTime.now().plusMinutes(5)); 
+            
         }
 
         return statusRepository.saveAll(statuses);
@@ -89,10 +90,11 @@ public class StatusService {
         return extended;
     }
 
-    public void confirmSeats(long showId, List<Integer> seatIds) {
+    public void confirmSeats(long showId, List<Long> seatIds) {
         List<Status> statuses = statusRepository.findByShowIdAndSeat_SeatIdIn(showId, seatIds);
-
+        System.out.println("-----"+statuses+"-----");
         for (Status status : statuses) {
+        	System.out.println("=====Enterin loop======");
             if (status.getStatus() == SeatStatus.LOCKED) {
                 status.setStatus(SeatStatus.BOOKED);
                 status.setLockedBy(null);
@@ -105,10 +107,14 @@ public class StatusService {
         statusRepository.saveAll(statuses);
     }
 
-    public void releaseSeats(long showId, List<Integer> seatIds, String userEmail) {
+    public void releaseSeats(long showId, List<Long> seatIds, String userEmail) {
         List<Status> statuses = statusRepository.findByShowIdAndSeat_SeatIdIn(showId, seatIds);
 
         for (Status status : statuses) {
+            System.out.println("SeatId: " + status.getSeat().getSeatId());
+            System.out.println("Current Status: " + status.getStatus());
+            System.out.println("Locked By: " + status.getLockedBy());
+            System.out.println("Provided Email: " + userEmail);
             if (status.getStatus() == SeatStatus.LOCKED && status.getLockedBy().equals(userEmail)) {
                 status.setStatus(SeatStatus.AVAILABLE);
                 status.setLockedBy(null);
@@ -132,7 +138,7 @@ public class StatusService {
     }
 
     
-    public List<Integer> getLockedSeats(long showId, String userEmail) {
+    public List<Long> getLockedSeats(long showId, String userEmail) {
         return statusRepository.findByShowIdAndLockedBy(showId, userEmail)
                 .stream()
                 .map(status -> status.getSeat().getSeatId())

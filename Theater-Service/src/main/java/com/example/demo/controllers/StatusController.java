@@ -1,6 +1,8 @@
 package com.example.demo.controllers;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +17,25 @@ public class StatusController {
     @Autowired
     private StatusService statusService;
 
-    @PostMapping("/initialize/{showId}")
-    public ResponseEntity<String> initializeSeats(@PathVariable long showId) {
+    @PostMapping("/add")
+    public ResponseEntity<String> initializeSeats(@RequestParam long showId) {
         statusService.initializeSeatsForShow(showId);
         return ResponseEntity.ok("Seats initialized for showId: " + showId);
     }
     
     @PostMapping("/lock")
-    public List<Status> lockSeats(@RequestParam long showId, @RequestParam List<Integer> seatIds, @RequestParam String userEmail) {
-        return statusService.lockSeats(showId, seatIds, userEmail);
+    public List<Status> lockSeats(
+            @RequestParam long showId,
+            @RequestParam String seatIds,
+            @RequestParam String userEmail) {
+        
+        List<Long> seatIdList = Arrays.stream(seatIds.split(","))
+                                      .map(Long::parseLong)
+                                      .collect(Collectors.toList());
+
+        return statusService.lockSeats(showId, seatIdList, userEmail);
     }
+
 
     @PutMapping("/extend-lock")
     public boolean extendSeatLockIfPaymentInProgress(@RequestParam long showId, @RequestParam List<Long> seatIds, @RequestParam String userEmail) {
@@ -32,14 +43,22 @@ public class StatusController {
     }
 
     @PutMapping("/confirm")
-    public ResponseEntity<String> confirmSeats(@RequestParam long showId, @RequestBody List<Integer> seatIds) {
-        statusService.confirmSeats(showId, seatIds);
+    public ResponseEntity<String> confirmSeats(@RequestParam long showId, @RequestParam String seatIds) {
+        List<Long> seatIdList = Arrays.stream(seatIds.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        System.out.println("Parsed seat IDs: " + seatIdList);
+        statusService.confirmSeats(showId, seatIdList);
         return ResponseEntity.ok("Seats confirmed successfully");
     }
 
     @PutMapping("/release")
-    public ResponseEntity<String> releaseSeats(@RequestParam long showId, @RequestParam List<Integer> seatIds, @RequestParam String userEmail) {
-        statusService.releaseSeats(showId, seatIds, userEmail);
+    public ResponseEntity<String> releaseSeats(@RequestParam long showId, @RequestParam String seatIds, @RequestParam String userEmail) {
+        List<Long> seatIdList = Arrays.stream(seatIds.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        System.out.println("Parsed seat IDs: " + seatIdList);
+        statusService.releaseSeats(showId, seatIdList, userEmail);
         return ResponseEntity.ok("Seats released successfully");
     }
 
@@ -50,7 +69,7 @@ public class StatusController {
     }
 
     @GetMapping("/locked")
-    public List<Integer> getLockedSeats(@RequestParam long showId, @RequestParam String userEmail) {
+    public List<Long> getLockedSeats(@RequestParam long showId, @RequestParam String userEmail) {
         return statusService.getLockedSeats(showId, userEmail);
     }
     

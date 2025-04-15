@@ -1,0 +1,32 @@
+package com.example.demo.dto;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+public class ShowResponse {
+    private Long timeId;
+    private String movieName;
+    private int screenId;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private LocalDate date;
+
+    // Getters and Setters
+    public Long getTimeId() { return timeId; }
+    public void setTimeId(Long timeId) { this.timeId = timeId; }
+
+    public String getMovieName() { return movieName; }
+    public void setMovieName(String movieName) { this.movieName = movieName; }
+
+    public int getScreenId() { return screenId; }
+    public void setScreenId(int screenId) { this.screenId = screenId; }
+
+    public LocalTime getStartTime() { return startTime; }
+    public void setStartTime(LocalTime startTime) { this.startTime = startTime; }
+
+    public LocalTime getEndTime() { return endTime; }
+    public void setEndTime(LocalTime endTime) { this.endTime = endTime; }
+
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) { this.date = date; }
+}

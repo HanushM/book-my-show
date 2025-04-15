@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.models.Screen;
+import com.example.demo.models.Theater;
 import com.example.demo.repositories.ScreenRepository;
 
 @Service
@@ -31,7 +32,6 @@ public class ScreenService {
         if (existingScreen.isPresent()) {
             Screen screen = existingScreen.get();
             screen.setScreenNo(updatedScreen.getScreenNo());
-            screen.setScreenName(updatedScreen.getScreenName());
             screen.setCapacity(updatedScreen.getCapacity());
             return screenRepository.save(screen);
         } else {
@@ -40,5 +40,18 @@ public class ScreenService {
     }
     public void deleteScreen(int screenId) {
         screenRepository.deleteById(screenId);
+    }
+    public Theater getTheaterByScreenId(int screenId) {
+        Optional<Screen> screenOptional = screenRepository.findById(screenId);
+        return screenOptional.map(Screen::getTheater).orElse(null);
+    }
+    
+    public List<Integer> getScreenNoByTheaterId(int theaterId) {
+        return screenRepository.findScreenNoByTheaterId(theaterId);
+    }
+    
+    public Integer getScreenId(int num,int theaterId)
+    {
+ 	   return  screenRepository.findScreenIdByTheaterIdAndScreenNo(num, theaterId);
     }
 }

@@ -11,6 +11,16 @@ public class Users {
 	private Long mobileNo;
 	private String name;
 	private String password;
+	@Column(name = "role", columnDefinition = "VARCHAR(255) DEFAULT 'user'")
+	private String role;
+	
+	
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
+	}
 	public String getEmailId() {
 		return emailId;
 	}

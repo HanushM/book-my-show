@@ -13,7 +13,6 @@ public class Screen {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int screenId;
 	private int screenNo;
-	private String ScreenName;
 	private int capacity;
 	@ManyToOne(optional = false)
 	@JoinColumn(name="theater_id", referencedColumnName = "theaterId",nullable = false)
@@ -32,12 +31,7 @@ public class Screen {
 	public void setScreenNo(int screenNo) {
 		this.screenNo = screenNo;
 	}
-	public String getScreenName() {
-		return ScreenName;
-	}
-	public void setScreenName(String screenName) {
-		ScreenName = screenName;
-	}
+
 	public int getCapacity() {
 		return capacity;
 	}

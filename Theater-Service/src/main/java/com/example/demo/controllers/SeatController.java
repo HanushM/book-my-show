@@ -44,9 +44,18 @@ public class SeatController {
     }
 
     @GetMapping("/{seatId}")
-    public ResponseEntity<Seat> getSeatById(@PathVariable int seatId) {
+    public ResponseEntity<Seat> getSeatById(@PathVariable Long seatId) {
         Optional<Seat> seat = seatService.getSeatById(seatId);
         return seat.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    
+    @GetMapping("/listOfSeats")
+    public ResponseEntity<List<Seat>> getListOfSeats(@RequestParam List<Long> seatIds) {
+        List<Seat> seats = seatService.getSeatsByIds(seatIds);
+        if (seats.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(seats);
     }
 
     @GetMapping("/tier/{tierId}")
@@ -66,14 +75,14 @@ public class SeatController {
 //    }
 
     @DeleteMapping("/delete/{seatId}")
-    public ResponseEntity<Void> deleteSeat(@PathVariable int seatId) {
+    public ResponseEntity<Void> deleteSeat(@PathVariable Long seatId) {
         seatService.deleteSeat(seatId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
     @GetMapping("/prices")
-    public ResponseEntity<Map<Integer, Integer>> getSeatAmount(@RequestParam List<Integer> seatIds) {
-        Map<Integer, Integer> seatPrices = seatService.getSeatAmount(seatIds);
+    public ResponseEntity<Map<Long, Integer>> getSeatAmount(@RequestParam List<Long> seatIds) {
+        Map<Long, Integer> seatPrices = seatService.getSeatAmount(seatIds);
         return ResponseEntity.ok(seatPrices);
     }
 }

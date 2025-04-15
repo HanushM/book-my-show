@@ -11,7 +11,9 @@ import com.example.demo.service.ShowtimeService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/shows")
@@ -25,8 +27,8 @@ public class ShowtimeController {
         return showtimeService.getAllShowtimes();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Show> getShowtimeById(@PathVariable Long id) {
+    @GetMapping("/byTimeId")
+    public ResponseEntity<Show> getShowtimeById(@RequestParam Long id) {
         Optional<Show> showtime = showtimeService.getShowtimeById(id);
         return showtime.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -53,5 +55,21 @@ public class ShowtimeController {
         showtimeService.deleteShowtime(id);
         return ResponseEntity.noContent().build();
     }
+    
+    @GetMapping("/screen-times")
+    public List<Map<String, Object>> getScreenIdAndStartTime(
+            @RequestParam String movieName,
+            @RequestParam String date
+    ) {
+        LocalDate localDate = LocalDate.parse(date);
+        List<Object[]> results = showtimeService.getScreenIdAndStartTimeByMovieAndDate(movieName, localDate);
+ 
+        return results.stream().map(obj -> Map.of(
+        		"timeId", obj[0],
+                "screenId", obj[1],
+                "startTime", obj[2]
+        )).collect(Collectors.toList());
+    }
+    
 }
 

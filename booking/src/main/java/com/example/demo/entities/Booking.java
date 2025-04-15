@@ -17,7 +17,7 @@ public class Booking {
     @Column(nullable = false)
     private String emailId;
 
-    @ElementCollection
+   
     private List<Long> seatIds;
 
     @Column(nullable = false)

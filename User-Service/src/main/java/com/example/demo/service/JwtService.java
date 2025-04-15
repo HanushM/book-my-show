@@ -17,14 +17,16 @@ public class JwtService {
 	private static final String SECRET_KEY = "yourSuperSecretKeyThatIsAtLeast32CharactersLong123";
   
 
-    public String generateToken(String emailId) {
-        return Jwts.builder()
-                .setSubject(emailId)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))  
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
+	public String generateToken(String emailId, String role) {
+	    return Jwts.builder()
+	            .setSubject(emailId)
+	            .claim("role", role)  // <-- include role as a claim
+	            .setIssuedAt(new Date())
+	            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))  // 10 hours
+	            .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+	            .compact();
+	}
+
 
     public boolean validateToken(String token, String emailId) {
         String username = extractUsername(token);
@@ -54,6 +56,10 @@ public class JwtService {
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+    
+    public String extractRole(String token) {
+        return extractClaims(token).get("role", String.class);
     }
 
 }

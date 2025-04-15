@@ -25,7 +25,13 @@ public class JwtController {
 
     @PostMapping("/decode")
     public ResponseEntity<String> decodeToken(@RequestParam String token) {
-        String emailId = jwtService.extractUsername(token);
-        return ResponseEntity.ok(emailId);
+        try {
+            String emailId = jwtService.extractUsername(token);
+            return ResponseEntity.ok(emailId);
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            return ResponseEntity.status(401).body("Token is expired");
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body("Invalid token");
+        }
     }
 }

@@ -37,10 +37,14 @@ public class SeatService {
         return seatRepository.findAll();
     }
 
-    public Optional<Seat> getSeatById(int seatId) {
+    public Optional<Seat> getSeatById(Long seatId) {
         return seatRepository.findById(seatId);
     }
 
+    public List<Seat> getSeatsByIds(List<Long> seatIds) {
+        return seatRepository.findAllById(seatIds);
+    }
+    
     public List<Seat> getSeatsByTier(int tierId) {
         return seatRepository.findByTier_TierId(tierId);
     }
@@ -57,15 +61,15 @@ public class SeatService {
 //        }
 //    }
 
-    public void deleteSeat(int seatId) {
+    public void deleteSeat(Long seatId) {
         seatRepository.deleteById(seatId);
     }
 
   
 
-    public Map<Integer, Integer> getSeatAmount(List<Integer> seatIds) {
+    public Map<Long, Integer> getSeatAmount(List<Long> seatIds) {
         List<Seat> seats = seatRepository.findBySeatIdIn(seatIds);
-        Map<Integer, Integer> seatAmounts = new HashMap<>();
+        Map<Long, Integer> seatAmounts = new HashMap<>();
 
         for (Seat seat : seats) {
             seatAmounts.put(seat.getSeatId(), seat.getTier().getAmount());
