@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../styles/AdminForm.css'; // use the common form styling here
 
 const MovieForm = () => {
   const [movieData, setMovieData] = useState({
@@ -74,43 +75,43 @@ const MovieForm = () => {
     <div className="upload">
       <h1>Upload Movie Details</h1>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <div>
           <label>Movie Name:</label>
           <input type="text" name="name" value={movieData.name} onChange={handleChange} />
         </div>
-        <div className="form-group">
+        <div>
           <label>Movie ID:</label>
           <input type="number" name="movieid" value={movieData.movieid} onChange={handleChange} />
         </div>
-        <div className="form-group">
+        <div>
           <label>Release Date:</label>
           <input type="date" name="releaseDate" value={movieData.releaseDate} onChange={handleChange} />
         </div>
-        <div className="form-group">
+        <div>
           <label>Link to Trailer:</label>
           <input type="url" name="linkToTrailer" value={movieData.linkToTrailer} onChange={handleChange} />
         </div>
-        <div className="form-group">
+        <div>
           <label>Cast (comma separated):</label>
           <input type="text" name="cast" value={movieData.cast} onChange={handleChange} />
         </div>
-        <div className="form-group">
+        <div>
           <label>Languages (comma separated):</label>
           <input type="text" name="languages" value={movieData.languages} onChange={handleChange} />
         </div>
-        <div className="form-group">
+        <div>
           <label>Rating:</label>
           <input type="number" name="rating" value={movieData.rating} onChange={handleChange} />
         </div>
-        <div className="form-group">
+        <div>
           <label>Genre:</label>
           <input type="text" name="genre" value={movieData.genre} onChange={handleChange} />
         </div>
-        <div className="form-group">
+        <div>
           <label>Comments:</label>
           <textarea name="comments" value={movieData.comments} onChange={handleChange}></textarea>
         </div>
-        <div className="form-group">
+        <div>
           <label>Image:</label>
           <input type="file" accept="image/*" onChange={handleImageChange} />
         </div>

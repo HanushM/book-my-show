@@ -1,0 +1,58 @@
+.landing-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.landing-hero {
+    background-image: url('/public/landingpageimage.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh; /* Ensures the hero section covers full viewport height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.landing-content {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 2rem 3rem;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.landing-content h1 {
+    font-size: 2.5rem;
+    color: #ec2434; /* Updated color */
+    margin-bottom: 1rem;
+}
+
+.landing-content p {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.landing-content button {
+    background-color: #ec2434; /* Updated color */
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.landing-content button:hover {
+    background-color: #d51f2f; /* Slightly darker shade for hover */
+}
+
+/* If using img tag, ensure it's responsive */
+.landing-image {
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    object-fit: cover; /* Ensures the image covers the area while maintaining aspect ratio */
+}

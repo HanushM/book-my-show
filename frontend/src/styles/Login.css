@@ -1,0 +1,84 @@
+/* Make sure there's no unintended margin/padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* Login page container */
+.login {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Header & Footer full-width fix */
+header, footer {
+    width: 100vw;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    flex-shrink: 0;
+}
+
+/* Center the form */
+.login form {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin: auto; /* vertically and horizontally center */
+    text-align: center;
+}
+
+/* Form fields styling */
+.login form label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.login form input[type="email"],
+.login form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.login form input[type="submit"] {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    background-color: #ec2434; /* Updated color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.login form input[type="submit"]:hover {
+    background-color: #d41d2a; /* Slightly darker shade for hover */
+}
+
+.login form p {
+    margin-top: 15px;
+    font-size: 0.9rem;
+}
+
+.login form a {
+    color: #ec2434; /* Updated color */
+    text-decoration: none;
+}

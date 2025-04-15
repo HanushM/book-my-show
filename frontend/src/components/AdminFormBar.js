@@ -5,7 +5,7 @@ import ScreenForm from './ScreenForm';
 import TheaterForm from './TheaterForm';
 import TierForm from './TierForm';
 import ShowForm from './ShowForm';
-
+import '../styles/AdminFormBar.css';
 
 const AdminFormBar = () => {
   const [currentForm, setCurrentForm] = useState('');

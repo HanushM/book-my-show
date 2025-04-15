@@ -1,6 +1,10 @@
 import axios from "axios";
 import {useEffect, useState} from "react";
 import {Link,useNavigate} from "react-router-dom";
+import "../styles/Login.css";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
 function Login(){
     const[userName,setUserName]=useState("");
     const[password,setUserPassword]=useState("");
@@ -27,6 +31,7 @@ function Login(){
     };
     return(
         <div className="login">
+            <Header/>
             <form onSubmit={handleSubmit}>
                 <label>Email: </label>
                 <input type="email" value={userName} onChange={(e)=>{setUserName(e.target.value)}}/><br></br>
@@ -35,6 +40,7 @@ function Login(){
                 <input type="submit" value="Login"/>
                 <Link to="/register"><p>Dont have an account?Create an account</p></Link>
             </form>
+            <Footer/>
         </div>
     );
 }

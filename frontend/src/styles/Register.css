@@ -1,0 +1,67 @@
+.register-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.register-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    padding: 2rem 1rem;
+}
+
+.register-content form {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    width: 320px;
+    text-align: center;
+}
+
+.register-content form label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.register-content form input[type="text"],
+.register-content form input[type="email"],
+.register-content form input[type="number"],
+.register-content form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.register-content form input[type="submit"] {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    background-color: #ec2434; /* Updated color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.register-content form input[type="submit"]:hover {
+    background-color: #d51f2f; /* Darker shade for hover */
+}
+
+.register-content form p {
+    margin-top: 15px;
+    font-size: 0.9rem;
+}
+
+.register-content form a {
+    color: #ec2434; /* Updated color */
+    text-decoration: none;
+}

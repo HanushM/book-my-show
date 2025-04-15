@@ -1,12 +1,14 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import AdminFormBar from "../components/AdminFormBar";
-import React, { useState, useEffect } from 'react';
-import axios from 'axios'
-import MovieCard from "../components/MovieCard"
-import { useNavigate } from 'react-router-dom';
+import MovieCard from "../components/MovieCard";
+import { useNavigate } from "react-router-dom";
+import "../styles/Main.css";
 
 function Main() {
+
   const [showAdminBar, setShowAdminBar] = useState(false);
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -18,7 +20,7 @@ function Main() {
     const fetchMovies = async () => {
       try {
         const response = await axios.get('http://localhost:8080/movies');
-        setMovies(response.data); 
+        setMovies(response.data);
       } catch (err) {
         console.error('Error fetching movies: ', err);
       }
@@ -38,7 +40,9 @@ function Main() {
 
   return (
     <div>
-      <Header onUploadClick={handleUploadClick}/>
+      <Header
+        onUploadClick={handleUploadClick}
+      />
       {showAdminBar && <AdminFormBar />}
       <h1 className="movies-title">Movies List</h1>
 
@@ -63,13 +67,13 @@ function Main() {
         {filteredMovies.length > 0 ? (
           filteredMovies.map((movie) => (
             <MovieCard
-              key={movie._id}
+              key={movie.name}
               movie={movie}
               onClick={() => {
                 if (role === 'admin') {
                   return;
                 }
-                navigate('/shows', { state: { movieName: movie.name } });
+                navigate('/shows', { state: { movieName:  movie.name} });
               }}
             />
           ))
@@ -77,6 +81,7 @@ function Main() {
           <p>No movies found!</p>
         )}
       </div>
+      
       <Footer />
     </div>
   );
