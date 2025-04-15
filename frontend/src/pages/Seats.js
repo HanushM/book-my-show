@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import qs from "qs"; // qs for correctly handling array parameters
-
+import "../styles/Seat.css";
+import chairAvailable from "../assets/images/chair-available.png";
+import chairLocked from "../assets/images/chair-locked.png";
+import chairBooked from "../assets/images/chair-booked.png";
+import card from "../assets/images/card.png";
+import gpay from "../assets/images/gpay.png";
+import netbanking from "../assets/images/netbanking.png";
+import paypal from "../assets/images/paypal.png";
 const Seats = () => {
   const { showId } = useParams();
   const [seats, setSeats] = useState([]);
@@ -11,12 +17,11 @@ const Seats = () => {
   const [userEmail, setUserEmail] = useState("");
   const [paymentId, setPaymentId] = useState(null);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
-  const [paymentStatus, setPaymentStatus] = useState(null); // Add state to store payment status
-
+  const [paymentStatus, setPaymentStatus] = useState(null);
   const navigate = useNavigate();
+  const [selectedMethod,setSelectedMethod] = useState("");
   const token = localStorage.getItem("token");
 
-  // Decode token and get user email
   useEffect(() => {
     if (token) {
       axios
@@ -28,7 +33,6 @@ const Seats = () => {
     }
   }, [token]);
 
-  // Fetch seats for the show
   const fetchSeats = () => {
     axios
       .get(`http://localhost:8080/status/seats/${showId}`)
@@ -36,21 +40,17 @@ const Seats = () => {
       .catch((error) => console.error("Error fetching seats:", error));
   };
 
-  // Auto-unlock expired seats every second
   useEffect(() => {
     fetchSeats();
     const interval = setInterval(() => {
       axios
         .put("http://localhost:8080/status/unlockExpired")
         .then(fetchSeats)
-        .catch((error) =>
-          console.error("Error unlocking expired seats:", error)
-        );
+        .catch((error) => console.error("Error unlocking expired seats:", error));
     }, 1000);
     return () => clearInterval(interval);
   }, []);
 
-  // Calculate total price for selected seats
   useEffect(() => {
     if (selectedSeats.length === 0) {
       setTotalPrice(0);
@@ -66,14 +66,9 @@ const Seats = () => {
       .catch((error) => console.error("Error fetching seat prices:", error));
   }, [selectedSeats]);
 
-  // Lock or unlock seats on click
   const handleSeatClick = (seatObj) => {
     const seatId = seatObj.seat.seatId;
-    const seatNo = seatObj.seat.seatNo;
-    console.log("Seat clicked => SeatNo:", seatNo, "| SeatId:", seatId);
-
-    const seatIdsString = seatId.toString(); // ✅ backend expects comma-separated string
-
+    const seatIdsString = seatId.toString();
     if (seatObj.status === "AVAILABLE") {
       axios
         .post(`http://localhost:8080/status/lock`, null, {
@@ -105,11 +100,10 @@ const Seats = () => {
     }
   };
 
-  // Create payment
   const handlePayClick = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/payments/create?showId=${showId}&emailId=${userEmail}&method=CARD`
+        `http://localhost:8080/payments/create?showId=${showId}&emailId=${userEmail}`
       );
       setPaymentId(response.data);
       setShowConfirmPopup(true);
@@ -118,52 +112,61 @@ const Seats = () => {
     }
   };
 
-  // Confirm payment
   const handleConfirmPayment = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/payments/status/${paymentId}`);
-      setPaymentStatus(response.data); // Store payment status response
+      const response = await axios.get(`http://localhost:8080/payments/status?paymentId=${paymentId}&method=${selectedMethod}`);
+      setPaymentStatus(response.data);
       navigate(`/payment/${paymentId}`);
     } catch (err) {
       console.error("Payment confirmation failed", err);
     }
   };
 
-  const handleClosePopup = () => {
-    setShowConfirmPopup(false);
+  const handleCancelPayment = async () => {
+    try {
+     
+      navigate(0);
+    } catch (err) {
+      console.error("Payment cancellation failed", err);
+    }
   };
+
+  
+
+  function handleClick(value) {
+    setSelectedMethod(value);
+    console.log("Selected Value:", selectedMethod);
+    
+  }
 
   const handleCancelBooking = async () => {
     try {
-      const seatString = selectedSeats.join(","); // Convert array to comma-separated string
-      await axios.put(
-        `http://localhost:8080/status/release`,
-        seatString, // Send as body (plain text)
-        {
-          headers: {
-            "Content-Type": "text/plain", // Important!
-          },
-          params: {
-            showId,
-          },
-        }
-      );
+      const seatString = selectedSeats.join(",");
+      await axios.put(`http://localhost:8080/status/release`, seatString, {
+        headers: {
+          "Content-Type": "text/plain",
+        },
+        params: {
+          showId,
+        },
+      });
       navigate("/main");
     } catch (err) {
       console.error("Error cancelling booking:", err);
     }
   };
 
-  const getSeatColor = (status) => {
+  const getSeatImage = (status, seatId) => {
+    if (selectedSeats.includes(seatId)) return chairLocked;
     switch (status) {
       case "AVAILABLE":
-        return "blue";
+        return chairAvailable;
       case "LOCKED":
-        return "grey";
+        return chairLocked;
       case "BOOKED":
-        return "green";
+        return chairBooked;
       default:
-        return "white";
+        return chairAvailable;
     }
   };
 
@@ -171,154 +174,110 @@ const Seats = () => {
     const grouped = {};
     seats.forEach((seatObj) => {
       const tier = seatObj.seat.tier;
-      const tierId = tier?.tierId;
       const tierName = tier?.tierName;
-      if (!tierId) return;
-      if (!grouped[tierId]) {
-        grouped[tierId] = { tierName, seats: [] };
+      if (!tierName) return;
+      if (!grouped[tierName]) {
+        grouped[tierName] = { tierName, seats: [] };
       }
-      grouped[tierId].seats.push(seatObj);
+      grouped[tierName].seats.push(seatObj);
     });
+
     Object.values(grouped).forEach((group) =>
       group.seats.sort((a, b) => a.seat.seatNo - b.seat.seatNo)
     );
-    return grouped;
+
+    const tierOrder = ["Silver", "Gold", "Platinum"];
+    const sortedGroups = {};
+    tierOrder.forEach((tierName) => {
+      if (grouped[tierName]) {
+        sortedGroups[tierName] = grouped[tierName];
+      }
+    });
+
+    return sortedGroups;
   };
 
   const groupedSeats = groupSeatsByTier(seats);
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
-      <h1>Seats for Show ID: {showId}</h1>
+    
+    <div className="seat-page">
+      <div className="screen">
+  <div className="screen-arc">SCREEN</div>
+</div>
 
-      {Object.entries(groupedSeats).map(([tierId, group]) => (
-        <div key={tierId} style={{ marginBottom: "30px" }}>
-          <h2>Tier {group.tierName}</h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(50px, 1fr))",
-              gap: "10px",
-              maxWidth: "600px",
-              margin: "0 auto",
-            }}
-          >
+      {Object.entries(groupedSeats).map(([tierName, group]) => (
+        <div key={tierName} className="tier-section">
+          <h2 className="tier-heading">Tier {group.tierName}</h2>
+          <div className="seat-grid">
             {group.seats.map((seatObj) => (
-              <div
+              <img
                 key={seatObj.statusId}
-                onClick={() => handleSeatClick(seatObj)}
+                src={getSeatImage(seatObj.status, seatObj.seat.seatId)}
+                alt={`Seat ${seatObj.seat.seatNo}`}
+                onClick={() =>
+                  seatObj.status === "AVAILABLE" || selectedSeats.includes(seatObj.seat.seatId)
+                    ? handleSeatClick(seatObj)
+                    : null
+                }
+                title={`Seat ${seatObj.seat.seatNo}`}
                 style={{
-                  width: "50px",
-                  height: "50px",
-                  backgroundColor: getSeatColor(seatObj.status),
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderRadius: "5px",
-                  color: "white",
-                  fontWeight: "bold",
-                  cursor: "pointer",
+                  width: "40px",
+                  height: "40px",
+                  cursor:
+                    seatObj.status === "AVAILABLE" || selectedSeats.includes(seatObj.seat.seatId)
+                      ? "pointer"
+                      : "not-allowed",
+                  transform: "scale(1)",
+                  transition: "transform 0.2s ease",
                 }}
-              >
-                {seatObj.seat.seatNo}
-              </div>
+                onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+                onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+              />
             ))}
           </div>
         </div>
       ))}
 
       {selectedSeats.length > 0 && (
-        <div style={{ marginTop: "20px" }}>
-          <button
-            style={{
-              padding: "10px 20px",
-              fontSize: "16px",
-              backgroundColor: "green",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              marginRight: "10px",
-            }}
-            onClick={handlePayClick}
-          >
+        <div className="seat-buttons">
+          <button className="pay-btn" onClick={handlePayClick}>
             Pay ₹{totalPrice}
           </button>
-
-          <button
-            style={{
-              padding: "10px 20px",
-              fontSize: "16px",
-              backgroundColor: "red",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-            }}
-            onClick={handleCancelBooking}
-          >
-            Cancel Booking
-          </button>
+         
         </div>
       )}
 
       {showConfirmPopup && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "30px",
-              borderRadius: "10px",
-              textAlign: "center",
-              boxShadow: "0 0 10px rgba(0,0,0,0.3)",
-            }}
-          >
-            <h2>Confirm Payment</h2>
-            <p>Proceed with payment of ₹{totalPrice} for selected seats.</p>
-            <button
-              style={{
-                padding: "10px 20px",
-                fontSize: "16px",
-                backgroundColor: "green",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                marginRight: "10px",
-              }}
-              onClick={handleConfirmPayment}
-            >
-              Confirm
-            </button>
-            <button
-              style={{
-                padding: "10px 20px",
-                fontSize: "16px",
-                backgroundColor: "red",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-              }}
-              onClick={handleClosePopup}
-            >
-              Cancel
-            </button>
+        <div className="popup-overlay">
+          <div className="popup">
+           
+          <p className="payment-title">Pay via</p>
+  <div class="card-container">
+  <div className="payment-card" onClick={() => handleClick('Credit Card')}>
+  <img src={card} alt="Credit Card" />
+</div>
+
+<div className="payment-card" onClick={() => handleClick('Gpay')}>
+  <img src={gpay} alt="Gpay" />
+</div>
+<div className="payment-card" onClick={() => handleClick('Paypal')}>
+  <img src={paypal} alt="paypal" />
+</div>
+<div className="payment-card" onClick={() => handleClick('Net banking')}>
+  <img src={netbanking} alt="Credit Card" />
+</div>
+</div>
+<div className="button-group">
+            <button className="confirm-btn" onClick={handleConfirmPayment}>Submit</button>
+            <button className="cancel-btn" onClick={handleCancelPayment}>Cancel</button>
+          </div>
           </div>
         </div>
       )}
 
-      {/* Check if paymentStatus is available before rendering */}
       {paymentStatus && paymentStatus.paymentId && (
-        <div>
+        <div className="payment-summary">
           <h2>Payment Details</h2>
           <p><strong>Payment ID:</strong> {paymentStatus.paymentId}</p>
           <p><strong>Email:</strong> {userEmail}</p>

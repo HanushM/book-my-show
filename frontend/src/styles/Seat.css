@@ -1,0 +1,250 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f7f7f7;
+}
+
+.seat-page {
+  padding: 2rem;
+  text-align: center;
+}
+
+.seat-heading {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.tier-section {
+  margin-bottom: 2rem;
+}
+
+.tier-heading {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+.screen {
+  margin: 2rem auto 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.screen-arc {
+  width: 90%;              /* Wider */
+  height: 80px;            /* Taller arc for more curvature */
+  border-top: 10px solid #bbb;  /* Thicker border */
+  border-radius: 100% 100% 0 0;
+  text-align: center;
+  line-height: 80px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #bbb;
+  position: relative;
+}
+
+
+/* Seat Grid */
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 10px;
+  justify-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Seat States */
+.seat {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  user-select: none;
+}
+
+.seat:hover {
+  transform: scale(1.1);
+}
+
+.available {
+  background-color: #4caf50; /* Green */
+}
+
+.locked {
+  background-color: #ff9800; /* Orange */
+  cursor: not-allowed;
+}
+
+.booked {
+  background-color: #9e9e9e; /* Grey */
+  cursor: not-allowed;
+}
+
+.selected {
+  background-color: #2196f3; /* Blue */
+}
+
+/* Buttons */
+.seat-buttons {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.pay-btn{
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+
+
+.pay-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.pay-btn:hover  {
+  background-color: #d32f2f;
+}
+
+/* Payment Popup */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Payment Summary */
+.payment-summary {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin: 2rem auto;
+  max-width: 500px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  text-align: left;
+}
+
+.payment-summary h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.payment-summary p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.confirm-btn,
+.cancel-btn {
+  padding: 0.4rem 2rem;         /* Small height, longer width */
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Confirm Button */
+.confirm-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.confirm-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Cancel Button */
+.cancel-btn {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+  max-width: 500px; /* Controls number of items in a row */
+  margin: auto;
+  box-sizing: border-box;
+}
+
+.payment-card {
+  width: calc(50% - 10px); /* Two cards per row with small gap */
+  height: 100px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-card:hover {
+  transform: scale(1.05);
+}
+
+.payment-card img {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+}
+.payment-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 16px; /* Adds space between buttons */
+  margin-top: 20px;
+}
+
+
+

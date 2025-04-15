@@ -36,6 +36,7 @@ function Header({ onUploadClick }) {
         <>
             <header className="header-container">
                 <img src="Logo.png" alt="BookMyShow Logo" className="logo" />
+
                 <img
                     src="user.png"
                     alt="User Icon"
