@@ -72,7 +72,7 @@ const TierForm = () => {
       amount: tierData.amount,
     };
  
-    console.log('Submitting tier data:', requestBody); // ✅ log request body
+    console.log('Submitting tier data:', requestBody); 
  
     axios.post('http://localhost:8080/tier/addTier', requestBody, {
       headers: {
