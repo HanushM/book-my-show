@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import '../styles/AdminForm.css';
 const ShowForm = () => {
   // State to hold form data for the show
   const [showData, setShowData] = useState({

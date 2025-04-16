@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Profile from "../components/Profile"; 
+import Profile from "../components/Profile";
+import "../styles/Header.css";
 
 function Header({ onUploadClick }) {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ function Header({ onUploadClick }) {
 
     const openProfilePopup = () => {
         setShowProfilePopup(true);
-        setSidebarOpen(false); // close sidebar when profile opens
+        setSidebarOpen(false);
     };
 
     const closeProfilePopup = () => {
@@ -34,70 +35,53 @@ function Header({ onUploadClick }) {
 
     return (
         <>
-            <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem", backgroundColor: "#eee" }}>
-                <img src="logo.png" alt="BookMyShow Logo" style={{ height: "50px" }} />
+            <header className="header-container">
+                <img src="Logo.png" alt="BookMyShow Logo" className="logo" />
+
+
                 <img
                     src="user.png"
                     alt="User Icon"
                     onClick={handleProfileClick}
-                    style={{ height: "40px", cursor: "pointer" }}
+                    className="user-icon"
                 />
             </header>
 
             {sidebarOpen && (
-                <div style={{
-                    position: "fixed",
-                    top: 0,
-                    right: 0,
-                    width: "250px",
-                    height: "100vh",
-                    backgroundColor: "#fff",
-                    boxShadow: "-2px 0 10px rgba(0,0,0,0.2)",
-                    padding: "1rem",
-                    zIndex: 1000
-                }}>
-                    <button onClick={handleProfileClick} style={{ float: "right" }}>X</button>
+                <div className="sidebar">
+                    <button className="close-btn" onClick={handleProfileClick}>X</button>
 
                     {!isLoggedIn ? (
                         <div>
                             <h3>Welcome Guest!</h3>
-                            <button onClick={goToLogin}>Login</button>
+                            <button className="sidebar-btn" onClick={goToLogin}>Login</button>
                         </div>
                     ) : (
                         <div>
                             <h3>Welcome {role}</h3>
-                            <ul style={{ listStyle: "none", padding: 0 }}>
-                                <li><button onClick={openProfilePopup}>Your Profile</button></li>
+                            <ul className="sidebar-list">
+                                <li><button className="sidebar-btn" onClick={openProfilePopup}>Your Profile</button></li>
                                 {role === "admin" && (
-                                    <li><button onClick={() => {
+                                    <li><button className="sidebar-btn" onClick={() => {
                                         onUploadClick();
                                         setSidebarOpen(false);
                                     }}>Upload</button></li>
                                 )}
-                                <li><button onClick={handleLogout}>Logout</button></li>
+                                <li><button className="sidebar-btn" onClick={handleLogout}>Logout</button></li>
                             </ul>
                         </div>
                     )}
                 </div>
             )}
 
-            {/* Profile Popup Modal */}
             {showProfilePopup && (
-                <div style={{
-                    position: "fixed",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    backgroundColor: "#fff",
-                    padding: "2rem",
-                    borderRadius: "10px",
-                    boxShadow: "0 0 15px rgba(0,0,0,0.3)",
-                    zIndex: 2000,
-                    minWidth: "300px"
-                }}>
-                    <button onClick={closeProfilePopup} style={{ float: "right", fontSize: "1.2rem" }}>X</button>
-                    <Profile />
-                </div>
+                <>
+                    <div className="overlay"></div> {/* Add overlay */}
+                    <div className="profile-popup open">
+                        <button className="popup-close-btn" onClick={closeProfilePopup}>X</button>
+                        <Profile />
+                    </div>
+                </>
             )}
         </>
     );

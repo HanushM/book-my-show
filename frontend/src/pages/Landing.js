@@ -1,9 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { useEffect } from "react";
+import "../styles/Landing.css";
 
-const Landing=()=>{
+const Landing = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -11,20 +12,20 @@ const Landing=()=>{
             navigate("/main");
         }
     }, [navigate]);
-    
-        return(
-        <div className="landing">
-            <header>
-                <Header/>
-                <Link to="/login"><button>Sign In</button></Link>
-            </header>
-            <section>
-                <p>Welcome To BookMYShow</p>
-                <p>It All Starts Here....</p>
-                <button>Explore Now</button>
-            </section>
-            <Footer/>
+
+    return (
+        <div className="landing-page">
+            <Header />
+            <div className="landing-hero">
+                <div className="landing-content">
+                    <h1>Welcome to BookMyShow</h1>
+                    <p>It All Starts Here...</p>
+                    <button onClick={() => navigate("/login")}>Explore Now</button>
+                </div>
+            </div>
+            <Footer />
         </div>
     );
-}
+};
+
 export default Landing;

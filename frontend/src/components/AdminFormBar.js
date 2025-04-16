@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
 
 // Upload Components
 import MovieForm from '../Admin/Upload/MovieForm';
@@ -23,6 +24,15 @@ import ScreenDeleteForm from '../Admin/Delete/ScreenDeleteForm';
 import TheaterDeleteForm from '../Admin/Delete/TheaterDeleteForm'; // Added
 import TierDeleteForm from '../Admin/Delete/TierDeleteForm';
 import ShowDeleteForm from '../Admin/Delete/ShowDeleteForm';
+=======
+import MovieForm from './MovieForm';
+import PlaceForm from './PlaceForm';
+import ScreenForm from './ScreenForm';
+import TheaterForm from './TheaterForm';
+import TierForm from './TierForm';
+import ShowForm from './ShowForm';
+import '../styles/AdminFormBar.css';
+>>>>>>> 69b10097302ea39ce4e9f2740a98e8ff2ae4293f
 
 const AdminFormBar = () => {
   const [activeTab, setActiveTab] = useState('upload');

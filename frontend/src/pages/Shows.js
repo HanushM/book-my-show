@@ -2,14 +2,32 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useNavigate, useLocation } from "react-router-dom";
+import "../styles/Shows.css"; // Import your external styles
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const Shows = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [shows, setShows] = useState([]);
+  const [movieDetails, setMovieDetails] = useState(null);
 
-  const movieName = location.state?.movieName   
+  const movieName = location.state?.movieName;
+
+  const fetchMovieDetails = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/movies/search", {
+        params: { name: movieName },
+      });
+      if (response.data && response.data.length > 0) {
+        console.log(response.data);
+        setMovieDetails(response.data[0]);
+      }
+    } catch (err) {
+      console.error("Error fetching movie details: ", err);
+    }
+  };
 
   const fetchShowtimes = async (date) => {
     try {
@@ -35,7 +53,7 @@ const Shows = () => {
               timeId: show.timeId,
               showId: show.timeId,
               screenId: show.screenId,
-              startTime: show.startTime, // "14:30:00"
+              startTime: show.startTime,
               screenName: show.screenName || `Screen ${show.screenId}`,
               theaterId,
               theaterName: theaterName || "Unknown Theater",
@@ -62,6 +80,7 @@ const Shows = () => {
   };
 
   useEffect(() => {
+    fetchMovieDetails();
     fetchShowtimes(selectedDate);
   }, [selectedDate, movieName]);
 
@@ -69,7 +88,6 @@ const Shows = () => {
     return Array.from({ length: 7 }, (_, i) => dayjs().add(i, "day"));
   };
 
-  // Group and sort shows by time
   const groupedShows = shows.reduce((acc, show) => {
     const key = `${show.theaterName}-${show.place}`;
     if (!acc[key]) {
@@ -83,19 +101,52 @@ const Shows = () => {
     return acc;
   }, {});
 
-  // Sort each group by startTime
   Object.values(groupedShows).forEach((group) => {
-    group.shows.sort((a, b) =>
-      a.startTime.localeCompare(b.startTime) // "14:00:00" < "18:30:00"
-    );
+    group.shows.sort((a, b) => a.startTime.localeCompare(b.startTime));
   });
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Showtimes for: {movieName}</h2>
-
+    <div className="page-container">
+      <Header/>
+    <div className="shows-container">
+      {movieDetails && (
+  <div className="movie-header">
+    <div className="movie-poster">
+      <img
+        src={`data:image/jpeg;base64,${movieDetails.imageBase64}`}
+        alt={movieDetails.name}
+      />
+    </div>
+    <div className="movie-info">
+      <h2>{movieDetails.name}</h2>
+      {movieDetails.genre && <p><strong>Genre:</strong> {movieDetails.genre}</p>}
+      {movieDetails.rating && <p><strong>Rating:</strong> {movieDetails.rating}</p>}
+      {movieDetails.releaseDate && (
+        <p>
+          <strong>Release Date:</strong>{" "}
+          {dayjs(movieDetails.releaseDate).format("MMMM D, YYYY")}
+        </p>
+      )}
+      {movieDetails.cast?.length > 0 && (
+        <p><strong>Cast:</strong> {movieDetails.cast.join(", ")}</p>
+      )}
+      {movieDetails.languages?.length > 0 && (
+        <p><strong>Languages:</strong> {movieDetails.languages.join(", ")}</p>
+      )}
+      {movieDetails.linkToTrailer && (
+        <a
+          href={movieDetails.linkToTrailer}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          🎬 Watch Trailer
+        </a>
+      )}
+    </div>
+  </div>
+)}
       {/* Date Row */}
-      <div className="flex space-x-4 overflow-x-auto mb-6">
+      <div className="date-scroll">
         {generateNext7Days().map((dateObj) => {
           const dateStr = dateObj.format("YYYY-MM-DD");
           const isSelected = dateStr === selectedDate;
@@ -103,9 +154,7 @@ const Shows = () => {
             <button
               key={dateStr}
               onClick={() => setSelectedDate(dateStr)}
-              className={`min-w-[80px] text-center py-2 rounded ${
-                isSelected ? "bg-blue-600 text-white" : "bg-gray-200"
-              }`}
+              className={`date-btn ${isSelected ? "selected" : ""}`}
             >
               <div className="text-sm font-bold">{dateObj.format("ddd")}</div>
               <div className="text-lg">{dateObj.format("DD")}</div>
@@ -121,27 +170,15 @@ const Shows = () => {
       ) : (
         <div className="space-y-4">
           {Object.entries(groupedShows).map(([key, group], index) => (
-            <div
-              key={index}
-              className="border border-gray-300 rounded-lg p-4 shadow-sm"
-            >
-              <p className="text-lg font-semibold">{group.theaterName}</p>
-              <p className="text-sm text-gray-600">{group.place}</p>
-
-              <div className="flex flex-wrap gap-2 mt-3">
+            <div key={index} className="theater-card">
+              <p className="theater-name">{group.theaterName}</p>
+              <p className="theater-location">{group.place}</p>
+              <div className="showtime-grid">
                 {group.shows.map((show) => (
                   <button
                     key={show.timeId}
                     onClick={() => navigate(`/seats/${show.timeId}`)}
-                    style={{
-                      padding: "10px 16px",
-                      fontSize: "14px",
-                      cursor: "pointer",
-                      backgroundColor: "#007bff",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "5px",
-                    }}
+                    className="showtime-btn"
                   >
                     {dayjs(`${selectedDate}T${show.startTime}`).format("h:mm A")}
                   </button>
@@ -151,6 +188,8 @@ const Shows = () => {
           ))}
         </div>
       )}
+    </div>
+    <Footer/>
     </div>
   );
 };
